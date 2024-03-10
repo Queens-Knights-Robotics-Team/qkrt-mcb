@@ -46,6 +46,11 @@
 /* define timers here -------------------------------------------------------*/
 tap::arch::PeriodicMilliTimer sendMotorTimeout(2);
 
+// bmi088 imu constants
+static constexpr float IMU_SAMPLE_FREQUENCY = 500;
+static constexpr float MAHONY_KP = 0.5f;
+static constexpr float MAHONY_KI = 0;
+
 // Place any sort of input/output initialization here. For example, place
 // serial init stuff here.
 static void initializeIo(src::Drivers *drivers);
@@ -84,7 +89,7 @@ int main()
 
         if (sendMotorTimeout.execute())
         {
-            PROFILE(drivers->profiler, drivers->mpu6500.periodicIMUUpdate, ());
+            PROFILE(drivers->profiler, drivers->bmi088.periodicIMUUpdate, ());
             PROFILE(drivers->profiler, drivers->commandScheduler.run, ());
             PROFILE(drivers->profiler, drivers->djiMotorTxHandler.encodeAndSendCanData, ());
             PROFILE(drivers->profiler, drivers->terminalSerial.update, ());
@@ -103,7 +108,7 @@ static void initializeIo(src::Drivers *drivers)
     drivers->can.initialize();
     drivers->errorController.init();
     drivers->remote.initialize();
-    drivers->mpu6500.init();
+    drivers->bmi088.initialize(IMU_SAMPLE_FREQUENCY, MAHONY_KP, MAHONY_KI);
     drivers->refSerial.initialize();
     drivers->terminalSerial.initialize();
     drivers->schedulerTerminalHandler.init();
@@ -119,5 +124,5 @@ static void updateIo(src::Drivers *drivers)
     drivers->canRxHandler.pollCanData();
     drivers->refSerial.updateSerial();
     drivers->remote.read();
-    drivers->mpu6500.read();
+    drivers->bmi088.getImuState();
 }
