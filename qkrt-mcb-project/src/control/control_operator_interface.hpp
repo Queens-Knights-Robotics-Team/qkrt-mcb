@@ -19,37 +19,25 @@
 
 #pragma once
 
-#include "tap/control/hold_command_mapping.hpp"
-#include "tap/control/hold_repeat_command_mapping.hpp"
-#include "tap/control/setpoint/commands/move_integral_command.hpp"
+#include "tap/util_macros.hpp"
 
-#include "control/chassis/chassis_subsystem.hpp"
-#include "control/chassis/chassis_omni_drive_command.hpp"
-
-class Drivers;
+namespace tap::communication::serial
+{
+class Remote;
+}
 
 namespace control
 {
-class Robot
+class ControlOperatorInterface
 {
 public:
-    Robot(Drivers &drivers);
+    ControlOperatorInterface(tap::communication::serial::Remote &remote);
 
-    void initSubsystemCommands();
-
+    float getChassisOmniLeftFrontInput();
+    float getChassisOmniLeftBackInput();
+    float getChassisOmniRightFrontInput();
+    float getChassisOmniRightBackInput();
 private:
-    void initializeSubsystems();
-    void registerSoldierSubsystems();
-    void setDefaultSoldierCommands();
-    void startSoldierCommands();
-    void registerSoldierIoMappings();
-
-    Drivers &drivers;
-
-    // STEP 1 (Tank Drive): declare ChassisSubystem
-    chassis::ChassisSubsystem chassis;
-
-    // STEP 2 (Tank Drive): declare ChassisTankDriveCommand
-    chassis::ChassisOmniDriveCommand chassisOmniDrive;
+    tap::communication::serial::Remote &remote;
 };
 }  // namespace control
