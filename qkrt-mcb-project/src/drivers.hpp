@@ -17,13 +17,16 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DRIVERS_HPP_
-#define DRIVERS_HPP_
+#pragma once
 
 #include "tap/drivers.hpp"
 
-namespace src
-{
+#ifdef ENV_UNIT_TESTS
+#include "control/mock_control_operator_interface.hpp"
+#else
+#include "control/control_operator_interface.hpp"
+#endif
+
 class Drivers : public tap::Drivers
 {
     friend class DriversSingleton;
@@ -31,11 +34,12 @@ class Drivers : public tap::Drivers
 #ifdef ENV_UNIT_TESTS
 public:
 #endif
-    Drivers() : tap::Drivers() {}
+    Drivers() : tap::Drivers(), controlOperatorInterface(remote) {}
 
 public:
+#ifdef ENV_UNIT_TESTS
+    control::MockControlOperatorInterface controlOperatorInterface;
+#else
+    control::ControlOperatorInterface controlOperatorInterface;
+#endif
 };  // class Drivers
-
-}  // namespace src
-
-#endif  // DRIVERS_HPP_

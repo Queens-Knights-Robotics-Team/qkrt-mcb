@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "windows-gcc-x86",
+      "name": "linux-gcc-x64",
       "defines": [
         "${default}",
         "ENV_UNIT_TESTS",
@@ -11,8 +11,8 @@
       "includePath": [
         "${workspaceFolder}/**"
       ],
-      "compilerPath": "C:/MinGW/bin/gcc.exe",
-      "intelliSenseMode": "windows-gcc-x86",
+      "compilerPath": "/usr/bin/gcc",
+      "intelliSenseMode": "linux-gcc-x64",
       "browse": {
         "limitSymbolsToIncludedHeaders": true
       },
