@@ -24,6 +24,9 @@
 #include "control/chassis/chassis_subsystem.hpp"
 #include "control/chassis/chassis_tank_drive_command.hpp"
 
+#include "flywheel/flywheel_subsystem.hpp"
+#include "flywheel/flywheel_on_command.hpp"
+
 #include "drivers.hpp"
 
 using tap::can::CanBus;
