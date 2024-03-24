@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 Advanced Robotics at the University of Washington <robomstr@uw.edu>
+ * Copyright (c) 2020-2022 Advanced Robotics at the University of Washington <robomstr@uw.edu>
  *
  * This file is part of aruw-edu.
  *
@@ -19,27 +19,27 @@
 
 #pragma once
 
-#include "tap/drivers.hpp"
+#include "tap/util_macros.hpp"
 
-#ifdef ENV_UNIT_TESTS
-#include "control/mock_control_operator_interface.hpp"
-#else
-#include "control/control_operator_interface.hpp"
-#endif
-
-class Drivers : public tap::Drivers
+namespace tap::communication::serial
 {
-    friend class DriversSingleton;
+class Remote;
+}
 
-#ifdef ENV_UNIT_TESTS
+namespace control
+{
+class ControlOperatorInterface
+{
 public:
-#endif
-    Drivers() : tap::Drivers(), controlOperatorInterface(remote) {}
+    ControlOperatorInterface(tap::communication::serial::Remote &remote);
 
-public:
-#ifdef ENV_UNIT_TESTS
-    control::MockControlOperatorInterface controlOperatorInterface;
-#else
-    control::ControlOperatorInterface controlOperatorInterface;
-#endif
-};  // class Drivers
+    // STEP 1 (Tank Drive): Add getChassisTankLeftInput and getChassisTankRightInput function
+    // declarations
+
+    mockable float getChassisTankLeftInput();
+    mockable float getChassisTankRightInput();
+
+private:
+    tap::communication::serial::Remote &remote;
+};
+}  // namespace control
