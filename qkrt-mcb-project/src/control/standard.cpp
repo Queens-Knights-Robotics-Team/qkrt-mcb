@@ -18,8 +18,13 @@
  */
 
 #include "standard.hpp"
+#include "drivers_singleton.hpp"
 
 #include "tap/util_macros.hpp"
+#include "tap/control/command_mapper.hpp"
+#include "tap/control/hold_repeat_command_mapping.hpp"
+#include "tap/control/hold_command_mapping.hpp"
+#include "tap/control/press_command_mapping.hpp"
 
 #include "control/chassis/chassis_subsystem.hpp"
 #include "control/chassis/chassis_tank_drive_command.hpp"
@@ -28,14 +33,30 @@
 #include "flywheel/flywheel_on_command.hpp"
 
 #include "drivers.hpp"
+#include "drivers_singleton.hpp"
+
 
 using tap::can::CanBus;
 using tap::communication::serial::Remote;
 using tap::control::RemoteMapState;
 using tap::motor::MotorId;
 
+using namespace tap::control;
+using namespace control;
+using namespace tap::communication::serial;
+
+driversFunc drivers = DoNotUse_getDrivers;
+control::flywheel::FlywheelSubsystem theFlywheel(drivers());
+control::flywheel::FlywheelOnCommand flywheelCommand(&theFlywheel);
+
 namespace control
 {
+
+HoldRepeatCommandMapping leftSwitchUp(
+    drivers(),
+    {&flywheelCommand},
+    RemoteMapState(Remote::Switch::LEFT_SWITCH, Remote::SwitchState::UP), true, -1);
+
 Robot::Robot(Drivers &drivers) : drivers(drivers),
 // STEP 3 (Tank Drive): construct ChassisSubsystem and ChassisTankDriveCommand
 chassis(drivers, chassis::ChassisConfig{
@@ -85,6 +106,8 @@ void Robot::initializeSubsystems()
     chassis.initialize();
     // STEP 4 (Agitator Control): initialize declared VelocityAgitatorSubsystem
     velocityAgitatorSubsystem.initialize();
+    theFlywheel.initialize();
+
 }
 
 void Robot::registerSoldierSubsystems()
@@ -93,6 +116,8 @@ void Robot::registerSoldierSubsystems()
     drivers.commandScheduler.registerSubsystem(&chassis);
     // STEP 5 (Agitator Control): register declared VelocityAgitatorSubsystem
     drivers.commandScheduler.registerSubsystem(&velocityAgitatorSubsystem);
+    drivers.commandScheduler.registerSubsystem(&theFlywheel);
+
 }
 
 void Robot::setDefaultSoldierCommands()
@@ -108,6 +133,7 @@ void Robot::registerSoldierIoMappings()
     // STEP 9 (Agitator Control): register HoldRepeatCommandMapping and HoldCommandMapping
     drivers.commandMapper.addMap(&rightSwitchUp);
     drivers.commandMapper.addMap(&HCM);
+    drivers.commandMapper.addMap(&leftSwitchUp);
     
 }
 }  // namespace control

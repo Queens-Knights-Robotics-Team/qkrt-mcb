@@ -25,7 +25,8 @@ public:
     void refresh() override;
 
 private:
-    static constexpr tap::gpio::Pwm::Pin FLYWHEEL_MOTOR_PIN = tap::gpio::Pwm::C1;
+    static constexpr tap::gpio::Pwm::Pin FLYWHEEL_MOTOR_PIN1 = tap::gpio::Pwm::C1;
+    static constexpr tap::gpio::Pwm::Pin FLYWHEEL_MOTOR_PIN2 = tap::gpio::Pwm::C2;
     static constexpr float MAX_SNAIL_OUTPUT = 0.50f;    // max pwm input value
     static constexpr float MIN_SNAIL_OUTPUT = 0.25f;    // min pwm input value
 
