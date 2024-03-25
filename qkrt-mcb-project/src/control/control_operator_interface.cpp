@@ -154,4 +154,15 @@ float ControlOperatorInterface::getChassisOmniRightBackInput() {
     }
 }
 
+// Add getTurretPitchInput and getTurretYawInput function definitions
+float ControlOperatorInterface::getTurretPitchInput()
+{
+    return limitVal(remote.getChannel(Remote::Channel::LEFT_VERTICAL), -1.0f, 1.0f);
+}
+
+float ControlOperatorInterface::getTurretYawInput()
+{
+    return limitVal(remote.getChannel(Remote::Channel::LEFT_HORIZONTAL), -1.0f, 1.0f);
+}
+
 }  // namespace control 

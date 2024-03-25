@@ -24,6 +24,9 @@
 #include "control/chassis/chassis_subsystem.hpp"
 #include "control/chassis/chassis_omni_drive_command.hpp"
 
+#include "control/turret/turret_subsystem.hpp"
+#include "control/turret/turret_gimbal_command.hpp"
+
 #include "drivers.hpp"
 
 using tap::can::CanBus;
@@ -64,7 +67,20 @@ velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
 moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
 // construct HoldRepeatCommandMapping and HoldCommandMapping
 rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
-HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP))
+HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
+
+// construct TurretSubsystem and TurretGimbalCommand
+turret(
+    drivers,
+    turret::TurretConfig{
+    // gimbal motors
+        .pitchId = MotorId::MOTOR5,
+        .yawId = MotorId::MOTOR6,
+        .canBus = CanBus::CAN_BUS1,
+        .velocityPidConfig = modm::Pid<float>::Parameter(10, 0, 0, 0, 16'000),
+    }),
+turretGimbal(turret, drivers.controlOperatorInterface)
+
 {
 }
 
@@ -83,6 +99,9 @@ void Robot::initializeSubsystems()
     chassis.initialize();
     // STEP 4 (Agitator Control): initialize declared VelocityAgitatorSubsystem
     velocityAgitatorSubsystem.initialize();
+
+    // initialize declared turret Subsystem
+    turret.initialize();
 }
 
 void Robot::registerSoldierSubsystems()
@@ -91,12 +110,18 @@ void Robot::registerSoldierSubsystems()
     drivers.commandScheduler.registerSubsystem(&chassis);
     // STEP 5 (Agitator Control): register declared VelocityAgitatorSubsystem
     drivers.commandScheduler.registerSubsystem(&velocityAgitatorSubsystem);
+
+    // register declared ChassisSubsystem
+    drivers.commandScheduler.registerSubsystem(&turret);
 }
 
 void Robot::setDefaultSoldierCommands()
 {
     // STEP 6 (Tank Drive): set ChassisTanKDriveCommand as default command for ChassisSubsystem
    chassis.setDefaultCommand(&chassisOmniDrive); 
+
+   // set TurretGimbalCommand as default command for TurretSubsystem
+    turret.setDefaultCommand(&turretGimbal);
 }
 
 void Robot::startSoldierCommands() {}

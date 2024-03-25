@@ -27,6 +27,10 @@
 #include "control/chassis/chassis_subsystem.hpp"
 #include "control/chassis/chassis_omni_drive_command.hpp"
 
+
+#include "control/turret/turret_subsystem.hpp"
+#include "control/turret/turret_gimbal_command.hpp"
+
 class Drivers;
 
 namespace control
@@ -58,5 +62,9 @@ private:
     tap::control::setpoint::MoveIntegralCommand moveIntegralCommand;
     tap::control::HoldRepeatCommandMapping rightSwitchUp;
     tap::control::HoldCommandMapping HCM;
+
+    // declare TurretSubystem and Command
+    turret::TurretSubsystem turret;
+    turret::TurretGimbalCommand turretGimbal;
 };
 }  // namespace control
