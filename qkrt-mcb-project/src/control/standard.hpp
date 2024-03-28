@@ -1,20 +1,20 @@
 /*
- * Copyright (c) 2020-2022 Advanced Robotics at the University of Washington <robomstr@uw.edu>
+ * Copyright (c) 2020-2021 Queen's Knights Robotics Team
  *
- * This file is part of aruw-edu.
+ * This file is part of qkrt-mcb.
  *
- * aruw-edu is free software: you can redistribute it and/or modify
+ * qkrt-mcb is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * aruw-edu is distributed in the hope that it will be useful,
+ * qkrt-mcb is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
- * along with aruw-edu.  If not, see <https://www.gnu.org/licenses/>.
+ * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #pragma once
@@ -47,25 +47,18 @@ private:
 
     Drivers &drivers;
 
-    // STEP 1 (Tank Drive): declare ChassisSubystem
     chassis::ChassisSubsystem chassis;
-    // STEP 2 (Tank Drive): declare ChassisTankDriveCommand
     chassis::ChassisTankDriveCommand chassisTankDrive;
 
     tap::motor::DjiMotor agitator;
-    // STEP 1 (Agitator Control): declare VelocityAgitatorSubsystem
-    
-
+ 
     algorithms::EduPidConfig eduPidConfig; 
     tap::control::setpoint::MoveIntegralCommand::Config moveIntegralConfig;
     agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem;
-
     
-    // STEP 2 (Agitator Control): declare MoveIntegralCommand
     tap::control::setpoint::MoveIntegralCommand moveIntegralCommand;
-    // STEP 6 (Agitator Control): declare HoldRepeatCommandMapping (rightSwitchUp)
     tap::control::HoldRepeatCommandMapping rightSwitchUp;
-    // STEP 7 (Agitator Control): declare HoldCommandMapping (leftMousePressed)
     tap::control::HoldCommandMapping HCM;
 };
+  
 }  // namespace control

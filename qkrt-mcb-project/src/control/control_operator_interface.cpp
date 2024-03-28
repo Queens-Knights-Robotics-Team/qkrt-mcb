@@ -21,7 +21,6 @@
 
 #include "tap/algorithms/math_user_utils.hpp"
 #include "tap/communication/serial/remote.hpp"
-#include "tap/architecture/clock.hpp"
 
 using tap::algorithms::limitVal;
 using tap::communication::serial::Remote;
@@ -83,4 +82,3 @@ float ControlOperatorInterface::getChassisOmniRightBackInput() {
 }
 
 }  // namespace control
-//

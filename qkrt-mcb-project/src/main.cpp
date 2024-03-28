@@ -31,7 +31,12 @@ static constexpr float IMU_SMAPLE_FREQUENCY = 500;
 static constexpr float MAHONY_KP = 0.5f;
 static constexpr float MAHONY_KI = 0;
 
+#include "control/robot.hpp"
+
+/* define timers here -------------------------------------------------------*/
 tap::arch::PeriodicMilliTimer sendMotorTimeout(2);
+
+control::Robot robot(*DoNotUse_getDrivers());
 
 control::Robot robot(*DoNotUse_getDrivers());
 

@@ -27,74 +27,64 @@ using tap::algorithms::limitVal;
 
 namespace control::chassis
 {
-ChassisSubsystem::ChassisSubsystem(Drivers& drivers, const ChassisConfig& config)
-    : Subsystem(&drivers),
-      desiredOutput{0.0f, 0.0f, 0.0f, 0.0f},
+
+ChassisSubsystem::ChassisSubsystem(Drivers &drivers, const ChassisConfig &config)
+    : tap::control::Subsystem(&drivers),
+      desiredOutput{},
       pidControllers{},
       motors{
-          Motor(&drivers, config.leftFrontId, config.canBus, false, "a"),
-          Motor(&drivers, config.leftBackId, config.canBus, false, "b"),
-          Motor(&drivers, config.rightFrontId, config.canBus, true, "c"),
-          Motor(&drivers, config.rightBackId, config.canBus, true, "d")}
+          Motor(&drivers, config.leftFrontId, config.canBus, false, "LF"),
+          Motor(&drivers, config.leftBackId, config.canBus, false, "LB"),
+          Motor(&drivers, config.rightFrontId, config.canBus, true, "RF"),
+          Motor(&drivers, config.rightBackId, config.canBus, true, "RB")
+      }
 {
-    for (auto& pid : pidControllers)
+    for (auto &controller : pidControllers)
     {
-        pid.setParameter(config.wheelVelocityPidConfig);
+        controller.setParameter(config.wheelVelocityPidConfig);
     }
-};
-// STEP 1 (Tank Drive): create constructor
-
-// STEP 2 (Tank Drive): initialize function
+}
 
 void ChassisSubsystem::initialize()
 {
-    for (auto& motor : motors)
+    for (auto &motor : motors)
     {
         motor.initialize();
     }
 }
 
-// STEP 3 (Tank Drive): setVelocityTankDrive function
 
-void ChassisSubsystem::setVelocityTankDrive(float left, float right)
+void ChassisSubsystem::setVelocityOmniDrive(float leftFront,
+                                            float leftBack,
+                                            float rightFront,
+                                            float rightBack)
 {
-    float newLeft = mpsToRpm(left);
-    float newRight = mpsToRpm(right);
+    leftFront  = mpsToRpm(leftFront);
+    leftBack   = mpsToRpm(leftBack);
+    rightFront = mpsToRpm(rightFront);
+    rightBack  = mpsToRpm(rightBack);
 
-    desiredOutput[static_cast<int>(MotorId::LF)] =
-        limitVal<float>(newLeft, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    desiredOutput[static_cast<int>(MotorId::LB)] =
-        limitVal<float>(newLeft, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    desiredOutput[static_cast<int>(MotorId::RF)] =
-        limitVal<float>(newRight, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    desiredOutput[static_cast<int>(MotorId::RB)] =
-        limitVal<float>(newRight, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    leftFront  = limitVal(leftFront, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    leftBack   = limitVal(leftBack, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    rightFront = limitVal(rightFront, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    rightBack  = limitVal(rightBack, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+
+    desiredOutput[static_cast<uint8_t>(MotorId::LF)] = leftFront;
+    desiredOutput[static_cast<uint8_t>(MotorId::LB)] = leftBack;
+    desiredOutput[static_cast<uint8_t>(MotorId::RF)] = rightFront;
+    desiredOutput[static_cast<uint8_t>(MotorId::RB)] = rightBack;
 }
-
-// STEP 4 (Tank Drive): refresh function
 
 void ChassisSubsystem::refresh()
 {
-    pidControllers[static_cast<int>(MotorId::LF)].update(
-        desiredOutput[static_cast<int>(MotorId::LF)] -
-        motors[static_cast<int>(MotorId::LF)].getShaftRPM());
-    pidControllers[static_cast<int>(MotorId::LB)].update(
-        desiredOutput[static_cast<int>(MotorId::LB)] -
-        motors[static_cast<int>(MotorId::LB)].getShaftRPM());
-    pidControllers[static_cast<int>(MotorId::RF)].update(
-        desiredOutput[static_cast<int>(MotorId::RF)] -
-        motors[static_cast<int>(MotorId::RF)].getShaftRPM());
-    pidControllers[static_cast<int>(MotorId::RB)].update(
-        desiredOutput[static_cast<int>(MotorId::RB)] -
-        motors[static_cast<int>(MotorId::RB)].getShaftRPM());
+    auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
+        pid.update(desiredOutput - motor.getShaftRPM());
+        motor.setDesiredOutput(pid.getValue());
+    };
 
-    motors[static_cast<int>(MotorId::LF)].setDesiredOutput(
-        pidControllers[static_cast<int>(MotorId::LF)].getValue());
-    motors[static_cast<int>(MotorId::LB)].setDesiredOutput(
-        pidControllers[static_cast<int>(MotorId::LB)].getValue());
-    motors[static_cast<int>(MotorId::RF)].setDesiredOutput(
-        pidControllers[static_cast<int>(MotorId::RF)].getValue());
-    motors[static_cast<int>(MotorId::RB)].setDesiredOutput(
-        pidControllers[static_cast<int>(MotorId::RB)].getValue());
+    for (size_t ii = 0; ii < motors.size(); ii++)
+    {
+        runPid(pidControllers[ii], motors[ii], desiredOutput[ii]);
+    }
 }
 }  // namespace control::chassis

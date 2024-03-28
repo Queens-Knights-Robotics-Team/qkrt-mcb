@@ -18,7 +18,7 @@
  */
 
 #pragma once
-    
+
 #include <array>
 
 #include "tap/control/subsystem.hpp"
@@ -57,9 +57,9 @@ public:
     enum class MotorId : uint8_t
     {
         LF = 0,  ///< Left front
-        LB = 1,      ///< Left back
-        RF = 2,      ///< Right front
-        RB = 3,      ///< Right back
+        LB,      ///< Left back
+        RF,      ///< Right front
+        RB,      ///< Right back
         NUM_MOTORS,
     };
 
@@ -81,15 +81,20 @@ public:
     void initialize() override;
 
     ///
-    /// @brief Control the chassis using tank drive. Sets the wheel velocity of the four drive
-    /// motors based on the input left/right desired velocity.
+    /// @brief Control the chassis using omni drive. Sets the wheel velocity of the four drive
+    /// motors individually based on on the input left/right desired velocity.
     ///
-    /// @param left Desired chassis speed in m/s of the left side of the chassis. Positive speed is
+    /// @param leftFront Desired speed in m/s of the left-front wheel of the chassis. Positive speed is
     /// forward, negative is backwards.
-    /// @param right Desired chassis speed in m/s of the right side of the chassis.
+    /// @param leftBack Desired speed in m/s of the left-back wheel of the chassis. Positive speed is
+    /// forward, negative is backwards.
+    /// @param rightFront Desired chassis speed in m/s of the right-front of the chassis. Positive speed is
+    /// forward, negative is backwards.
+    /// @param rightBack Desired speed in m/s of the right-back wheel of the chassis. Positive speed is
+    /// forward, negative is backwards.
     ///
-    mockable void setVelocityOmniDrive(float left, float right);
-
+    void setVelocityOmniDrive(float leftFront, float leftBack, float rightFront, float rightBack);
+    
     ///
     /// @brief Runs velocity PID controllers for the drive motors.
     ///
