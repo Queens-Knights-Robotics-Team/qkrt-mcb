@@ -28,23 +28,15 @@ namespace control::algorithms
 {
 float EduPid::runControllerDerivateError(float error, float dt)
 {
-    if (dt == 0.0f)
-    {
-        return 0.0f;
-    }
+    // Remove these during implementation
+    if (dt == 0) return 0;
     currErrorP = pidConfig.kp * error;
-    currErrorI += pidConfig.ki * error * dt;
-    currErrorD = pidConfig.kd * (error - prevError) / dt;
+    currErrorI = limitVal<float>(currErrorI + error * dt * pidConfig.ki, -pidConfig.maxICumulative, pidConfig.maxICumulative);
+    currErrorD = pidConfig.kd *  (error - prevError) / dt;
+    output = limitVal<float>(currErrorP + currErrorI + currErrorD, -pidConfig.maxOutput, pidConfig.maxOutput);
+    // STEP 1: implement PID controller
     prevError = error;
 
-    currErrorI =
-        pidConfig.maxICumulative == 0.0
-            ? 0.0
-            : limitVal<float>(currErrorI, -pidConfig.maxICumulative, pidConfig.maxICumulative);
-    output = currErrorP + currErrorI + currErrorD;
-    output = pidConfig.maxOutput == 0.0
-                 ? 0.0
-                 : limitVal<float>(output, -pidConfig.maxOutput, pidConfig.maxOutput);
     return output;
 }
 

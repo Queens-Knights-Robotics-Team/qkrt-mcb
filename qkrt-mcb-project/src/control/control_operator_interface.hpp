@@ -21,6 +21,9 @@
 
 #include "tap/util_macros.hpp"
 
+#include <tuple>
+#include <algorithm>
+
 namespace tap::communication::serial
 {
 class Remote;
@@ -33,15 +36,17 @@ class ControlOperatorInterface
 public:
     ControlOperatorInterface(tap::communication::serial::Remote &remote);
 
+    std::tuple<double, double, double> pollInput();
+
     float getChassisOmniLeftFrontInput();
     float getChassisOmniLeftBackInput();
     float getChassisOmniRightFrontInput();
     float getChassisOmniRightBackInput();
 
+
     // Add getTurretPitchInput and getTurretYawInput function declarations
     float getTurretPitchInput();                 
     float getTurretYawInput();
-    
 private:
     tap::communication::serial::Remote &remote;
 };

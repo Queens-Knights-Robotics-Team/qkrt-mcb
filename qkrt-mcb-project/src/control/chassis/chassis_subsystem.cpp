@@ -27,7 +27,7 @@ using tap::algorithms::limitVal;
 
 namespace control::chassis
 {
-// STEP 1 (Tank Drive): create constructor
+
 ChassisSubsystem::ChassisSubsystem(Drivers &drivers, const ChassisConfig &config)
     : tap::control::Subsystem(&drivers),
       desiredOutput{},
@@ -45,7 +45,6 @@ ChassisSubsystem::ChassisSubsystem(Drivers &drivers, const ChassisConfig &config
     }
 }
 
-// STEP 2 (Tank Drive): initialize function
 void ChassisSubsystem::initialize()
 {
     for (auto &motor : motors)
@@ -54,7 +53,7 @@ void ChassisSubsystem::initialize()
     }
 }
 
-// STEP 4 (Tank Drive): setVelocityOmniDrive function
+
 void ChassisSubsystem::setVelocityOmniDrive(float leftFront,
                                             float leftBack,
                                             float rightFront,
@@ -76,7 +75,6 @@ void ChassisSubsystem::setVelocityOmniDrive(float leftFront,
     desiredOutput[static_cast<uint8_t>(MotorId::RB)] = rightBack;
 }
 
-// STEP 5 (Tank Drive): refresh function
 void ChassisSubsystem::refresh()
 {
     auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {

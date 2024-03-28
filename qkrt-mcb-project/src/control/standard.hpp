@@ -25,11 +25,7 @@
 
 #include "control/agitator/velocity_agitator_subsystem.hpp"
 #include "control/chassis/chassis_subsystem.hpp"
-#include "control/chassis/chassis_omni_drive_command.hpp"
-
-
-#include "control/turret/turret_subsystem.hpp"
-#include "control/turret/turret_gimbal_command.hpp"
+#include "control/chassis/chassis_tank_drive_command.hpp"
 
 class Drivers;
 
@@ -39,6 +35,7 @@ class Robot
 {
 public:
     Robot(Drivers &drivers);
+
     void initSubsystemCommands();
 
 private:
@@ -51,20 +48,17 @@ private:
     Drivers &drivers;
 
     chassis::ChassisSubsystem chassis;
-    chassis::ChassisOmniDriveCommand chassisOmniDrive;
+    chassis::ChassisTankDriveCommand chassisTankDrive;
 
-    tap::motor::DjiMotor agitator;    
-
+    tap::motor::DjiMotor agitator;
+ 
     algorithms::EduPidConfig eduPidConfig; 
     tap::control::setpoint::MoveIntegralCommand::Config moveIntegralConfig;
     agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem;
-
+    
     tap::control::setpoint::MoveIntegralCommand moveIntegralCommand;
     tap::control::HoldRepeatCommandMapping rightSwitchUp;
     tap::control::HoldCommandMapping HCM;
-
-    // declare TurretSubystem and Command
-    turret::TurretSubsystem turret;
-    turret::TurretGimbalCommand turretGimbal;
 };
+  
 }  // namespace control

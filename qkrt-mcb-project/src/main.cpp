@@ -1,57 +1,42 @@
 /*
- * Copyright (c) 2020-2021 Queen's Knights Robotics Team
+ * Copyright (c) 2020-2021 Advanced Robotics at the University of Washington <robomstr@uw.edu>
  *
- * This file is part of qkrt-mcb.
+ * This file is part of aruw-edu.
  *
- * qkrt-mcb is free software: you can redistribute it and/or modify
+ * aruw-edu is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * qkrt-mcb is distributed in the hope that it will be useful,
+ * aruw-edu is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
+ * along with aruw-edu.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifdef PLATFORM_HOSTED
-/* hosted environment (simulator) includes --------------------------------- */
-#include <iostream>
-
-#include "tap/communication/tcp-server/tcp_server.hpp"
-#include "tap/motor/motorsim/sim_handler.hpp"
-#endif
-
-#include "tap/board/board.hpp"
-
-#include "modm/architecture/interface/delay.hpp"
-
-/* arch includes ------------------------------------------------------------*/
+#include "tap/architecture/clock.hpp"
 #include "tap/architecture/periodic_timer.hpp"
 #include "tap/architecture/profiler.hpp"
+#include "tap/board/board.hpp"
 
-/* communication includes ---------------------------------------------------*/
-#include "drivers.hpp"
+#include "control/robot.hpp"
+#include "modm/architecture/interface/delay.hpp"
+
 #include "drivers_singleton.hpp"
 
-/* error handling includes --------------------------------------------------*/
-#include "tap/errors/create_errors.hpp"
-
-/* control includes ---------------------------------------------------------*/
-#include "tap/architecture/clock.hpp"
+static constexpr float IMU_SMAPLE_FREQUENCY = 500;
+static constexpr float MAHONY_KP = 0.5f;
+static constexpr float MAHONY_KI = 0;
 
 #include "control/robot.hpp"
 
 /* define timers here -------------------------------------------------------*/
 tap::arch::PeriodicMilliTimer sendMotorTimeout(2);
 
-// bmi088 imu constants
-static constexpr float IMU_SAMPLE_FREQUENCY = 500;
-static constexpr float MAHONY_KP = 0.5f;
-static constexpr float MAHONY_KI = 0;
+control::Robot robot(*DoNotUse_getDrivers());
 
 control::Robot robot(*DoNotUse_getDrivers());
 
@@ -66,10 +51,6 @@ static void updateIo(Drivers *drivers);
 
 int main()
 {
-#ifdef PLATFORM_HOSTED
-    std::cout << "Simulation starting..." << std::endl;
-#endif
-
     /*
      * NOTE: We are using DoNotUse_getDrivers here because in the main
      *      robot loop we must access the singleton drivers to update
@@ -80,12 +61,6 @@ int main()
     Board::initialize();
     initializeIo(drivers);
     robot.initSubsystemCommands();
-
-#ifdef PLATFORM_HOSTED
-    tap::motorsim::SimHandler::resetMotorSims();
-    // Blocking call, waits until Windows Simulator connects.
-    tap::communication::TCPServer::MainServer()->getConnection();
-#endif
 
     while (1)
     {
@@ -113,7 +88,7 @@ static void initializeIo(Drivers *drivers)
     drivers->can.initialize();
     drivers->errorController.init();
     drivers->remote.initialize();
-    drivers->bmi088.initialize(IMU_SAMPLE_FREQUENCY, MAHONY_KP, MAHONY_KI);
+    drivers->bmi088.initialize(IMU_SMAPLE_FREQUENCY, MAHONY_KP, MAHONY_KI);
     drivers->refSerial.initialize();
     drivers->terminalSerial.initialize();
     drivers->schedulerTerminalHandler.init();
@@ -122,10 +97,6 @@ static void initializeIo(Drivers *drivers)
 
 static void updateIo(Drivers *drivers)
 {
-#ifdef PLATFORM_HOSTED
-    tap::motorsim::SimHandler::updateSims();
-#endif
-
     drivers->canRxHandler.pollCanData();
     drivers->refSerial.updateSerial();
     drivers->remote.read();
