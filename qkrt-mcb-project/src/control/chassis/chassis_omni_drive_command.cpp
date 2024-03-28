@@ -29,7 +29,6 @@ using tap::algorithms::limitVal;
 
 namespace control::chassis
 {
-// STEP 1 (Tank Drive): Constructor
 ChassisOmniDriveCommand::ChassisOmniDriveCommand(
     ChassisSubsystem &chassis,
     ControlOperatorInterface &operatorInterface)
@@ -39,7 +38,6 @@ ChassisOmniDriveCommand::ChassisOmniDriveCommand(
     addSubsystemRequirement(&chassis);
 }
 
-// STEP 2 (Tank Drive): execute function
 void ChassisOmniDriveCommand::execute()
 {
     auto scale = [](float raw) -> float {
@@ -54,6 +52,6 @@ void ChassisOmniDriveCommand::execute()
     );
 }
 
-// STEP 3 (Tank Drive): end function
 void ChassisOmniDriveCommand::end(bool) { chassis.setVelocityOmniDrive(.0f, .0f, .0f, .0f); }
+
 };  // namespace control::chassis

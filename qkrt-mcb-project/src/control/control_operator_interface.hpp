@@ -35,15 +35,15 @@ public:
     ControlOperatorInterface(tap::communication::serial::Remote& remote,
                              tap::communication::sensors::imu::bmi088::Bmi088& imu);
 
-    std::tuple<double, double, double> pollInput();
+    std::tuple<double, double, double> pollWheelInput();
 
     float getChassisOmniLeftFrontInput();
     float getChassisOmniLeftBackInput();
     float getChassisOmniRightFrontInput();
     float getChassisOmniRightBackInput();
 
-    float getTurretPitchInput() { return 0.0f;}
-    float getTurretYawInput() { return 0.0f; }
+    float getTurretPitchInput();
+    float getTurretYawInput();
 private:
     tap::communication::serial::Remote& remote;
     tap::communication::sensors::imu::bmi088::Bmi088& imu;

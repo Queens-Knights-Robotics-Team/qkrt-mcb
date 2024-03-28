@@ -64,10 +64,10 @@ void ChassisSubsystem::setVelocityOmniDrive(float leftFront,
     rightFront = mpsToRpm(rightFront);
     rightBack  = mpsToRpm(rightBack);
 
-    leftFront  = limitVal(leftFront, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    leftBack   = limitVal(leftBack, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    leftFront  = limitVal(leftFront,  -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    leftBack   = limitVal(leftBack,   -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
     rightFront = limitVal(rightFront, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    rightBack  = limitVal(rightBack, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    rightBack  = limitVal(rightBack,  -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
 
     desiredOutput[static_cast<uint8_t>(MotorId::LF)] = leftFront;
     desiredOutput[static_cast<uint8_t>(MotorId::LB)] = leftBack;
@@ -87,4 +87,5 @@ void ChassisSubsystem::refresh()
         runPid(pidControllers[ii], motors[ii], desiredOutput[ii]);
     }
 }
+
 }  // namespace control::chassis

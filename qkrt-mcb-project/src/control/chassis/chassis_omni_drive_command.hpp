@@ -62,4 +62,5 @@ private:
 
     ControlOperatorInterface &operatorInterface;
 };
+
 }  // namespace control::chassis

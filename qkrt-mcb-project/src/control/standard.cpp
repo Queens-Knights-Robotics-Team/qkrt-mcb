@@ -59,14 +59,21 @@ HoldRepeatCommandMapping leftSwitchUp(
 Robot::Robot(Drivers &drivers)
         : drivers(drivers),
           chassis(drivers, chassis::ChassisConfig {
-                  .leftFrontId = MotorId::MOTOR2,
-                  .leftBackId = MotorId::MOTOR3,
-                  .rightBackId = MotorId::MOTOR4,
-                  .rightFrontId = MotorId::MOTOR1,
-                  .canBus = CanBus::CAN_BUS1,
-                  .wheelVelocityPidConfig = modm::Pid<float>::Parameter(10,0,0,0,1000),
-              }),
+                .leftFrontId = MotorId::MOTOR2,
+                .leftBackId = MotorId::MOTOR3,
+                .rightBackId = MotorId::MOTOR4,
+                .rightFrontId = MotorId::MOTOR1,
+                .canBus = CanBus::CAN_BUS1,
+                .wheelVelocityPidConfig = modm::Pid<float>::Parameter(10,0,0,0,1000),
+            }),
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
+          turret(drivers, turret::TurretConfig {
+                .pitchId = MotorId::MOTOR6,
+                .yawId = MotorId::MOTOR5,
+                .canBus = CanBus::CAN_BUS1,
+                .turretVelocityPidConfig = modm::Pid<float>::Parameter(10,0,0,0,1000),
+            }),
+          turretGimbal(turret, drivers.controlOperatorInterface),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, false, "e"),
           eduPidConfig{
               .kp = 1000,
@@ -99,6 +106,7 @@ void Robot::initSubsystemCommands()
 void Robot::initializeSubsystems()
 {
     chassis.initialize();
+    turret.initialize();
     velocityAgitatorSubsystem.initialize();
     theFlywheel.initialize();
 }
@@ -106,13 +114,15 @@ void Robot::initializeSubsystems()
 void Robot::registerSoldierSubsystems()
 {
     drivers.commandScheduler.registerSubsystem(&chassis);
+    drivers.commandScheduler.registerSubsystem(&turret);
     drivers.commandScheduler.registerSubsystem(&velocityAgitatorSubsystem);
     drivers.commandScheduler.registerSubsystem(&theFlywheel);
 }
 
 void Robot::setDefaultSoldierCommands()
 {
-   chassis.setDefaultCommand(&chassisOmniDrive); 
+   chassis.setDefaultCommand(&chassisOmniDrive);
+   turret.setDefaultCommand(&turretGimbal);
 }
 
 void Robot::startSoldierCommands() {}

@@ -36,7 +36,7 @@ namespace control
 ControlOperatorInterface::ControlOperatorInterface(Remote &remote, Bmi088& imu)
         : remote(remote), imu(imu) {}
 
-std::tuple<double, double, double> ControlOperatorInterface::pollInput() {
+std::tuple<double, double, double> ControlOperatorInterface::pollWheelInput() {
     /* use doubles for enhanced precision when processing return values */
     double x    = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_HORIZONTAL),  -1.0f, 1.0f));
     double y    = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_VERTICAL),    -1.0f, 1.0f));
@@ -45,33 +45,41 @@ std::tuple<double, double, double> ControlOperatorInterface::pollInput() {
     double rotY = x * std::sin(-yaw) + y * std::cos(-yaw);
 
     // double rx   = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL), -1.0f, 1.0f));
-    double rx = 0.075f;
+    double rx = 0.0f;
     
     return std::make_tuple(rotX, rotY, rx);
 }
 
 float ControlOperatorInterface::getChassisOmniLeftFrontInput() {
-    auto [vx, vy, w] = pollInput();
+    auto [vx, vy, w] = pollWheelInput();
     double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
     return (vy + vx + w) / denom;
 }
 
 float ControlOperatorInterface::getChassisOmniLeftBackInput() {
-    auto [vx, vy, w] = pollInput();
+    auto [vx, vy, w] = pollWheelInput();
     double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
     return (vy - vx + w) / denom;
 }
 
 float ControlOperatorInterface::getChassisOmniRightFrontInput() {
-    auto [vx, vy, w] = pollInput();
+    auto [vx, vy, w] = pollWheelInput();
     double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
     return (vy - vx - w) / denom;
 }
 
 float ControlOperatorInterface::getChassisOmniRightBackInput() {
-    auto [vx, vy, w] = pollInput();
+    auto [vx, vy, w] = pollWheelInput();
     double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
     return (vy + vx - w) / denom;
+}
+
+float ControlOperatorInterface::getTurretPitchInput() {
+    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_VERTICAL),  -1.0f, 1.0f);
+}
+
+float ControlOperatorInterface::getTurretYawInput() {
+    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL),  -1.0f, 1.0f);
 }
 
 }  // namespace control

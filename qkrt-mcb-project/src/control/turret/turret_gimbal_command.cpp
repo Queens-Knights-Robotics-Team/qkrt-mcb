@@ -10,17 +10,16 @@ using tap::algorithms::limitVal;
 
 namespace control::turret
 {
-// Constructor
+
 TurretGimbalCommand::TurretGimbalCommand(
-    TurretSubsystem &turret,
-    ControlOperatorInterface &operatorInterface)
+    TurretSubsystem& turret,
+    ControlOperatorInterface& operatorInterface)
     : turret(turret),
       operatorInterface(operatorInterface)
 {
     addSubsystemRequirement(&turret);
 }
 
-// execute function
 void TurretGimbalCommand::execute()
 {
     auto scale = [](float raw) -> float {
@@ -29,9 +28,10 @@ void TurretGimbalCommand::execute()
 
     turret.setVelocityGimbal(
         scale(operatorInterface.getTurretPitchInput()),
-        scale(operatorInterface.getTurretYawInput()));
+        scale(operatorInterface.getTurretYawInput())
+    );
 }
 
-// end function
-void TurretGimbalCommand::end(bool) { turret.setVelocityGimbal(0, 0); }
+void TurretGimbalCommand::end(bool) { turret.setVelocityGimbal(.0f, .0f); }
+
 };  // namespace control::turret

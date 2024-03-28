@@ -25,7 +25,7 @@ struct TurretConfig
     tap::motor::MotorId pitchId;
     tap::motor::MotorId yawId;
     tap::can::CanBus canBus;
-    modm::Pid<float>::Parameter velocityPidConfig;
+    modm::Pid<float>::Parameter turretVelocityPidConfig;
 };
 
 ///
@@ -38,7 +38,7 @@ public:
     enum class MotorId : uint8_t
     {
         PITCH = 0,  ///< Pitch
-        YAW,      ///< Yaw
+        YAW,        ///< Yaw
         NUM_MOTORS,
     };
 

@@ -26,7 +26,7 @@ public:
      *
      * @param turret turret to control.
      */
-    TurretGimbalCommand(TurretSubsystem &turret, ControlOperatorInterface &operatorInterface);
+    TurretGimbalCommand(TurretSubsystem& turret, ControlOperatorInterface& operatorInterface);
 
     const char *getName() const override { return "Turret Gimbal"; }
 
@@ -39,8 +39,9 @@ public:
     bool isFinished() const { return false; }
 
 private:
-    TurretSubsystem &turret;
+    TurretSubsystem& turret;
 
-    ControlOperatorInterface &operatorInterface;
+    ControlOperatorInterface& operatorInterface;
 };
+
 }  // namespace control::turret

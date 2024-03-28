@@ -15,12 +15,12 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
       pidControllers{},
       motors{
           Motor(&drivers, config.pitchId, config.canBus, false, "PITCH"),
-          Motor(&drivers, config.yawId, config.canBus, false, "YAW"),
+          Motor(&drivers, config.yawId,   config.canBus, false, "YAW"),
       }
 {
     for (auto &controller : pidControllers)
     {
-        controller.setParameter(config.velocityPidConfig);
+        controller.setParameter(config.turretVelocityPidConfig);
     }
 }
 
@@ -37,13 +37,13 @@ void TurretSubsystem::initialize()
 void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 {
     pitch = mpsToRpm(pitch);
-    yaw = mpsToRpm(yaw);
+    yaw   = mpsToRpm(yaw);
 
     pitch = limitVal(pitch, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    yaw = limitVal(yaw, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    yaw   = limitVal(yaw,   -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
 
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch;
-    desiredOutput[static_cast<uint8_t>(MotorId::YAW)] = yaw;
+    desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yaw;
 }
 
 // refresh function

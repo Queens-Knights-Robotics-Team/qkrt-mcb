@@ -27,6 +27,9 @@
 #include "control/chassis/chassis_subsystem.hpp"
 #include "control/chassis/chassis_omni_drive_command.hpp"
 
+#include "control/turret/turret_subsystem.hpp"
+#include "control/turret/turret_gimbal_command.hpp"
+
 class Drivers;
 
 namespace control
@@ -49,6 +52,9 @@ private:
 
     chassis::ChassisSubsystem chassis;
     chassis::ChassisOmniDriveCommand chassisOmniDrive;
+
+    turret::TurretSubsystem turret;
+    turret::TurretGimbalCommand turretGimbal;
 
     tap::motor::DjiMotor agitator;
  
