@@ -19,14 +19,12 @@
 
 #pragma once
 
-#include "tap/util_macros.hpp"
-
 #include <tuple>
-#include <algorithm>
 
-namespace tap::communication::serial
+namespace tap::communication
 {
-class Remote;
+namespace serial { class Remote; }
+namespace sensors::imu::bmi088 { class Bmi088; }
 }
 
 namespace control
@@ -34,7 +32,8 @@ namespace control
 class ControlOperatorInterface
 {
 public:
-    ControlOperatorInterface(tap::communication::serial::Remote &remote);
+    ControlOperatorInterface(tap::communication::serial::Remote& remote,
+                             tap::communication::sensors::imu::bmi088::Bmi088& imu);
 
     std::tuple<double, double, double> pollInput();
 
@@ -43,11 +42,10 @@ public:
     float getChassisOmniRightFrontInput();
     float getChassisOmniRightBackInput();
 
-
-    // Add getTurretPitchInput and getTurretYawInput function declarations
-    float getTurretPitchInput();                 
-    float getTurretYawInput();
+    float getTurretPitchInput() { return 0.0f;}
+    float getTurretYawInput() { return 0.0f; }
 private:
-    tap::communication::serial::Remote &remote;
+    tap::communication::serial::Remote& remote;
+    tap::communication::sensors::imu::bmi088::Bmi088& imu;
 };
 }  // namespace control

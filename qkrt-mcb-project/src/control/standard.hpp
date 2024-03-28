@@ -25,7 +25,7 @@
 
 #include "control/agitator/velocity_agitator_subsystem.hpp"
 #include "control/chassis/chassis_subsystem.hpp"
-#include "control/chassis/chassis_tank_drive_command.hpp"
+#include "control/chassis/chassis_omni_drive_command.hpp"
 
 class Drivers;
 
@@ -48,7 +48,7 @@ private:
     Drivers &drivers;
 
     chassis::ChassisSubsystem chassis;
-    chassis::ChassisTankDriveCommand chassisTankDrive;
+    chassis::ChassisOmniDriveCommand chassisOmniDrive;
 
     tap::motor::DjiMotor agitator;
  

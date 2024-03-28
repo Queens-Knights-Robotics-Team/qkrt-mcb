@@ -27,7 +27,7 @@
 #include "tap/control/press_command_mapping.hpp"
 
 #include "control/chassis/chassis_subsystem.hpp"
-#include "control/chassis/chassis_tank_drive_command.hpp"
+#include "control/chassis/chassis_omni_drive_command.hpp"
 
 #include "flywheel/flywheel_subsystem.hpp"
 #include "flywheel/flywheel_on_command.hpp"
@@ -112,7 +112,7 @@ void Robot::registerSoldierSubsystems()
 
 void Robot::setDefaultSoldierCommands()
 {
-   chassis.setDefaultCommand(&chassisTankDrive); 
+   chassis.setDefaultCommand(&chassisOmniDrive); 
 }
 
 void Robot::startSoldierCommands() {}
