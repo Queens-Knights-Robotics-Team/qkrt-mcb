@@ -21,6 +21,9 @@
 
 #include "tap/util_macros.hpp"
 
+#include <tuple>
+#include <algorithm>
+
 namespace tap::communication::serial
 {
 class Remote;
@@ -33,11 +36,12 @@ class ControlOperatorInterface
 public:
     ControlOperatorInterface(tap::communication::serial::Remote &remote);
 
-    // STEP 1 (Tank Drive): Add getChassisTankLeftInput and getChassisTankRightInput function
-    // declarations
+    std::tuple<double, double, double> pollInput();
 
-    mockable float getChassisTankLeftInput();
-    mockable float getChassisTankRightInput();
+    float getChassisOmniLeftFrontInput();
+    float getChassisOmniLeftBackInput();
+    float getChassisOmniRightFrontInput();
+    float getChassisOmniRightBackInput();
 
 private:
     tap::communication::serial::Remote &remote;
