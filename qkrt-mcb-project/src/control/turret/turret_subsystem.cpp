@@ -41,6 +41,8 @@ void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 
     pitch = limitVal(pitch, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
     yaw   = limitVal(yaw,   -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
+    // pitch = limitVal(pitch, -MAX_GIMBAL_SPEED_RPM, MAX_GIMBAL_SPEED_RPM);
+    // yaw   = limitVal(yaw,   -MAX_GIMBAL_SPEED_RPM, MAX_GIMBAL_SPEED_RPM);
 
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch;
     desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yaw;
