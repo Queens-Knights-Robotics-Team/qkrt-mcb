@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2020-2021 Queen's Knights Robotics Team
+ *
+ * This file is part of qkrt-mcb.
+ *
+ * qkrt-mcb is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * qkrt-mcb is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #pragma once
 
 #include <array>
@@ -50,7 +69,7 @@ public:
     using Motor = tap::motor::DjiMotor;
 #endif
 
-    static constexpr float MAX_WHEELSPEED_RPM = 7000;
+    static constexpr float MAX_GIMBAL_SPEED_RPM = 300;
 
     TurretSubsystem(Drivers& drivers, const TurretConfig& config);
 
@@ -77,16 +96,13 @@ public:
     const char* getName() override { return "Turret"; }
 
 private:
-    inline float mpsToRpm(float mps)
+    float MAX_RPM = 300.0f;
+    float MAX_MV = 25000.0f;
+    
+    float rpmToMilliVolts(float rpm)
     {
-        static constexpr float GEAR_RATIO = 19.0f;
-        static constexpr float WHEEL_DIAMETER_M = 0.076f;
-        static constexpr float WHEEL_CIRCUMFERANCE_M = M_PI * WHEEL_DIAMETER_M;
-        static constexpr float SEC_PER_M = 60.0f;
-
-        return (mps / WHEEL_CIRCUMFERANCE_M) * SEC_PER_M * GEAR_RATIO;
+        return rpm * MAX_MV / MAX_RPM;
     }
-
     /// Desired wheel output for each motor
     std::array<float, static_cast<uint8_t>(MotorId::NUM_MOTORS)> desiredOutput;
 

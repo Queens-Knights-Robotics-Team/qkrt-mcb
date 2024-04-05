@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2020-2021 Queen's Knights Robotics Team
+ *
+ * This file is part of qkrt-mcb.
+ *
+ * qkrt-mcb is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * qkrt-mcb is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #include "turret_subsystem.hpp"
 
 #include "tap/algorithms/math_user_utils.hpp"
@@ -36,14 +55,10 @@ void TurretSubsystem::initialize()
 // setVelocityGimbal function
 void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 {
-    pitch = mpsToRpm(pitch);
-    yaw   = mpsToRpm(yaw);
+    pitch = limitVal(rpmToMilliVolts(pitch), -MAX_MV, MAX_MV);
+    yaw   = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
 
-    pitch = limitVal(pitch, -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    yaw   = limitVal(yaw,   -MAX_WHEELSPEED_RPM, MAX_WHEELSPEED_RPM);
-    // pitch = limitVal(pitch, -MAX_GIMBAL_SPEED_RPM, MAX_GIMBAL_SPEED_RPM);
-    // yaw   = limitVal(yaw,   -MAX_GIMBAL_SPEED_RPM, MAX_GIMBAL_SPEED_RPM);
-
+    // desiredOutput takes milliVolts as input
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch;
     desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yaw;
 }
