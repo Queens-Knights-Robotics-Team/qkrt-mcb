@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2020-2021 Advanced Robotics at the University of Washington <robomstr@uw.edu>
+ * Copyright (c) 2023-2024 Queen's Knigths Robotics Team
  *
- * This file is part of aruw-edu.
+ * This file is part of qkrt-mcb.
  *
- * aruw-edu is free software: you can redistribute it and/or modify
+ * qkrt-mcb is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * aruw-edu is distributed in the hope that it will be useful,
+ * qkrt-mcb is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -27,19 +27,17 @@
 
 #include "drivers_singleton.hpp"
 
-static constexpr float IMU_SMAPLE_FREQUENCY = 500;
+#include "control/robot.hpp"
+
+static constexpr float IMU_SAMPLE_FREQUENCY = 500;
 static constexpr float MAHONY_KP = 0.5f;
 static constexpr float MAHONY_KI = 0;
 
-#include "control/robot.hpp"
-
-/* define timers here -------------------------------------------------------*/
 tap::arch::PeriodicMilliTimer sendMotorTimeout(2);
 
+// Create instance of a robot object
 control::Robot robot(*DoNotUse_getDrivers());
 
-// Place any sort of input/output initialization here. For example, place
-// serial init stuff here.
 static void initializeIo(Drivers *drivers);
 
 // Anything that you would like to be called place here. It will be called
@@ -86,7 +84,7 @@ static void initializeIo(Drivers *drivers)
     drivers->can.initialize();
     drivers->errorController.init();
     drivers->remote.initialize();
-    drivers->bmi088.initialize(IMU_SMAPLE_FREQUENCY, MAHONY_KP, MAHONY_KI);
+    drivers->bmi088.initialize(IMU_SAMPLE_FREQUENCY, MAHONY_KP, MAHONY_KI);
     drivers->refSerial.initialize();
     drivers->terminalSerial.initialize();
     drivers->schedulerTerminalHandler.init();
