@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024 Queen's Knigths Robotics Team
+ * Copyright (c) 2020-2021 Queen's Knights Robotics Team
  *
  * This file is part of qkrt-mcb.
  *
@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with aruw-edu.  If not, see <https://www.gnu.org/licenses/>.
+ * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include "tap/architecture/clock.hpp"
