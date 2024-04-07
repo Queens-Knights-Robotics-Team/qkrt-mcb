@@ -30,6 +30,9 @@
 #include "control/turret/turret_subsystem.hpp"
 #include "control/turret/turret_gimbal_command.hpp"
 
+#include "control/flywheel/flywheel_subsystem.hpp"
+#include "control/flywheel/flywheel_on_command.hpp"
+
 class Drivers;
 
 namespace control
@@ -56,6 +59,9 @@ private:
     turret::TurretSubsystem turret;
     turret::TurretGimbalCommand turretGimbal;
 
+    flywheel::FlywheelSubsystem flywheels;
+    flywheel::FlywheelOnCommand flywheelsCommand;
+
     tap::motor::DjiMotor agitator;
  
     algorithms::EduPidConfig eduPidConfig; 
@@ -65,6 +71,8 @@ private:
     tap::control::setpoint::MoveIntegralCommand moveIntegralCommand;
     tap::control::HoldRepeatCommandMapping rightSwitchUp;
     tap::control::HoldCommandMapping HCM;
+
+    tap::control::HoldRepeatCommandMapping leftSwitchUp;
 };
   
 }  // namespace control

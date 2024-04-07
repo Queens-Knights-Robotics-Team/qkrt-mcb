@@ -45,17 +45,9 @@ using namespace control;
 using namespace tap::communication::serial;
 
 driversFunc drivers = DoNotUse_getDrivers;
-control::flywheel::FlywheelSubsystem theFlywheel(drivers());
-control::flywheel::FlywheelOnCommand flywheelCommand(&theFlywheel);
 
 namespace control
 {
-
-HoldRepeatCommandMapping leftSwitchUp(
-    drivers(),
-    {&flywheelCommand},
-    RemoteMapState(Remote::Switch::LEFT_SWITCH, Remote::SwitchState::UP), true, -1);
-
 Robot::Robot(Drivers &drivers)
         : drivers(drivers),
           chassis(drivers, chassis::ChassisConfig {
@@ -71,7 +63,7 @@ Robot::Robot(Drivers &drivers)
                 .pitchId = MotorId::MOTOR6,
                 .yawId = MotorId::MOTOR5,
                 .canBus = CanBus::CAN_BUS1,
-                .turretVelocityPidConfig = modm::Pid<float>::Parameter(10,0,0,0,25000),
+                .turretVelocityPidConfig = modm::Pid<float>::Parameter(10,1,0,5000,25000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, false, "e"),
@@ -90,7 +82,10 @@ Robot::Robot(Drivers &drivers)
           velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
           moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
           rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
-          HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP))
+          HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
+          flywheels(drivers),
+          flywheelsCommand(&flywheels),
+          leftSwitchUp(&drivers, {&flywheelsCommand}, RemoteMapState(Remote::Switch::LEFT_SWITCH, Remote::SwitchState::UP), true, -1)
 {
 }
 
@@ -108,7 +103,7 @@ void Robot::initializeSubsystems()
     chassis.initialize();
     turret.initialize();
     velocityAgitatorSubsystem.initialize();
-    theFlywheel.initialize();
+    flywheels.initialize();
 }
 
 void Robot::registerSoldierSubsystems()
@@ -116,7 +111,7 @@ void Robot::registerSoldierSubsystems()
     drivers.commandScheduler.registerSubsystem(&chassis);
     drivers.commandScheduler.registerSubsystem(&turret);
     drivers.commandScheduler.registerSubsystem(&velocityAgitatorSubsystem);
-    drivers.commandScheduler.registerSubsystem(&theFlywheel);
+    drivers.commandScheduler.registerSubsystem(&flywheels);
 }
 
 void Robot::setDefaultSoldierCommands()

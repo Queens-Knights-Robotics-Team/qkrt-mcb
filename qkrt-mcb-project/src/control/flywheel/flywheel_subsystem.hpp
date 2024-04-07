@@ -1,11 +1,14 @@
+#pragma once
 
 #ifndef FLYWHEEL_SUBSYSTEM_HPP_
 #define FLYWHEEL_SUBSYSTEM_HPP_
 
-#include "tap/drivers.hpp"
 #include "tap/control/subsystem.hpp"
-#include "tap/communication/gpio/pwm.hpp"
 #include "tap/util_macros.hpp"
+
+#include "tap/communication/gpio/pwm.hpp"
+
+class Drivers;
 
 namespace control
 {
@@ -15,9 +18,9 @@ namespace flywheel
 class FlywheelSubsystem : public tap::control::Subsystem
 {
 public:
-    FlywheelSubsystem(tap::Drivers *drivers);
+    FlywheelSubsystem(Drivers& drivers);
         
-    ~FlywheelSubsystem() = default;
+    // ~FlywheelSubsystem() = default;
 
     void initialize() override;
 
@@ -30,7 +33,7 @@ private:
     static constexpr tap::gpio::Pwm::Pin FLYWHEEL_MOTOR_PIN2 = tap::gpio::Pwm::C2;
     static constexpr float MAX_SNAIL_OUTPUT = 0.50f;    
     static constexpr float MIN_SNAIL_OUTPUT = 0.25f;    
-    tap::Drivers *drivers;
+
 };
 
 }  

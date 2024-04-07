@@ -1,19 +1,14 @@
 #include "flywheel_subsystem.hpp"
 
 #include "tap/communication/serial/remote.hpp"
+#include "drivers.hpp"
 
-using namespace tap;
-
-namespace control
+namespace control::flywheel
 {
-namespace flywheel
+FlywheelSubsystem::FlywheelSubsystem(Drivers& drivers)
+    : tap::control::Subsystem(&drivers)
 {
-
-FlywheelSubsystem::FlywheelSubsystem(tap::Drivers *drivers)
-        : tap::control::Subsystem(drivers),
-        drivers(drivers)
-        {
-        }
+}
         
 void FlywheelSubsystem::initialize() { 
     drivers->pwm.write(0.25f, FLYWHEEL_MOTOR_PIN1);
@@ -28,5 +23,4 @@ void FlywheelSubsystem::setDesiredOutput(float output) {
     drivers->leds.set(tap::gpio::Leds::Green, true);
 }
 
-}  // flywheel
 }  // control

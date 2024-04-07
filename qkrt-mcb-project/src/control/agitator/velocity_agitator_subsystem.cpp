@@ -38,7 +38,9 @@ VelocityAgitatorSubsystem::VelocityAgitatorSubsystem(
     tap::motor::DjiMotor& agitator)
     : Subsystem(&drivers),
       agitator(agitator),
-      velocityPid(pidConfig){};
+      velocityPid(pidConfig)
+{
+}
 
 // STEP 2 (Agitator Control): initialize function
 
