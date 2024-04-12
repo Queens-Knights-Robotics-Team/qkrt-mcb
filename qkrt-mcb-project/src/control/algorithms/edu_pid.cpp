@@ -46,5 +46,6 @@ void EduPid::reset()
     currErrorI = 0.0f;
     currErrorD = 0.0f;
     output = 0.0f;
+    prevError = 0.0f;
 }
 }  // namespace control::algorithms
