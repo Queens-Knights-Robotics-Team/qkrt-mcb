@@ -58,6 +58,10 @@ void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
     pitch = limitVal(rpmToMilliVolts(pitch), -MAX_MV, MAX_MV);
     yaw   = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
 
+    if (pitch < 0){
+        pitch = pitch/4.0;
+    }
+
     // desiredOutput takes milliVolts as input
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch;
     desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yaw;
