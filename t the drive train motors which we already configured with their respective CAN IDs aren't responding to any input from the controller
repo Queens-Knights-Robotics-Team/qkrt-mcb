@@ -1,0 +1,746 @@
+[33mcommit 6743eeed84407c99d574ca81e741510dba215432[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/mouse-control[m[33m, [m[1;31morigin/mcb-jetson-sync[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Nathan Duncan <20ntd1@queensu.ca>
+Date:   Thu Apr 18 18:38:04 2024 -0400
+
+    slows downward pitch velocity
+
+[33mcommit 6df0aaa76c521fd19a68d018263decdfd18a7acc[m
+Author: QKRT_Desktop <qkrt@queensu.ca>
+Date:   Wed Apr 17 15:37:35 2024 -0400
+
+    toggle between controller and keyboard
+
+[33mcommit 4b94a4081695a1ba3de3a97acd9164cbfad97595[m[33m ([m[1;31morigin/clean-code[m[33m, [m[1;32mclean-code[m[33m)[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Fri Apr 12 18:28:36 2024 -0400
+
+    Added headers
+
+[33mcommit 292e9e6359cb76c50b909026e70baeebaf0c382e[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Apr 7 15:30:07 2024 -0400
+
+    Added headers, changed constructors
+
+[33mcommit 864a76d99742f7e63a6dc51b65774fe996722bf8[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Fri Apr 5 17:56:00 2024 -0400
+
+    Changed headers
+
+[33mcommit e67bf5decc69b810fec472ee6a72413a5a6cec65[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Fri Apr 5 17:55:44 2024 -0400
+
+    added RPM to mV conversion
+
+[33mcommit 2b0a881c7b9c7bb5c2b46d2805eaec59d84850b1[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Thu Apr 4 21:19:52 2024 -0400
+
+    Changed header to qkrt
+
+[33mcommit c62728980c0d42079ed5b92d387bbbd69afe50bb[m
+Author: Nathan Duncan <20ntd1@queensu.ca>
+Date:   Mon Apr 1 18:21:05 2024 -0400
+
+    Gimbal PID tuned
+
+[33mcommit 9af454522d6fceef09ebdaecb813b92e3d68b532[m
+Author: QKRT_Desktop <qkrt@queensu.ca>
+Date:   Thu Mar 28 16:22:30 2024 -0400
+
+    turret moving
+
+[33mcommit 6238d696e12d65ca9b977720891cb833556b5a09[m
+Author: QKRT_Desktop <qkrt@queensu.ca>
+Date:   Thu Mar 28 14:40:54 2024 -0400
+
+    fixed errors -- implemented beyblade + movement + flywheel
+
+[33mcommit eacf5d89e8e9b16fc86df9b15275ac87ccf84564[m
+Merge: e7901df 410811d
+Author: Queen's Knights Robotics Team <qkrt@engsoc.queensu.ca>
+Date:   Thu Mar 28 14:18:53 2024 -0400
+
+    Merge pull request #2 from Queens-Knights-Robotics-Team/base
+    
+    beyblade omni drive + turret firing
+
+[33mcommit 410811d500ac2bc5b9d7514aa5607a7bfa55b63b[m
+Merge: ead99f1 e7901df
+Author: Queen's Knights Robotics Team <qkrt@engsoc.queensu.ca>
+Date:   Thu Mar 28 14:18:42 2024 -0400
+
+    Merge branch 'master' into base
+
+[33mcommit ead99f11cd3b9dfd0721d31df54d276469bdadf8[m[33m ([m[1;31morigin/base[m[33m, [m[1;32mbase[m[33m)[m
+Merge: 793b159 0cccf6b
+Author: Queen's Knights Robotics Team <qkrt@engsoc.queensu.ca>
+Date:   Thu Mar 28 13:51:44 2024 -0400
+
+    Merge pull request #1 from Queens-Knights-Robotics-Team/add-omni
+    
+    implemented beyblade + movement
+
+[33mcommit 0cccf6b63e78af81b9686ea8ddc8b6019b39dbcd[m[33m ([m[1;31morigin/add-omni[m[33m, [m[1;32madd-omni[m[33m)[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Thu Mar 28 12:44:49 2024 -0400
+
+    Started adding onmi code
+
+[33mcommit e7901dfd7a5e9e6d7f51dc0723039b16b266fab6[m
+Author: Nathan Duncan <20ntd1@queensu.ca>
+Date:   Mon Mar 25 18:58:21 2024 -0400
+
+    adds turret control but doesn't work
+
+[33mcommit 793b159e0ce36fd14c9f13307cce640c9613e695[m[33m ([m[1;31morigin/gimbal_control[m[33m)[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Mar 24 15:37:26 2024 -0400
+
+    Working tank drive, agitator and flywheel with controller
+
+[33mcommit 67ef9c230cf16c32f85dfde96af22d51b2c63c89[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Mar 24 15:03:35 2024 -0400
+
+    Added preliminary flywheel code
+
+[33mcommit 195d37b8cf0f8f3886f8ea12547cd1f41c640f63[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Mar 24 14:38:23 2024 -0400
+
+    Added tank drive tutorial
+
+[33mcommit 0b3d63f2b28890bdc6638a1093f13aff49f46f28[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Mon Mar 18 18:05:29 2024 -0400
+
+    Added flywheel code
+
+[33mcommit 387bc17c55bdb6861179405429ecabd5ef8f1b0a[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Mon Mar 11 17:45:02 2024 -0400
+
+    Changed headers
+
+[33mcommit 3b7893920d1bf7ae1615b83b208c49ea09da1ec9[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Mar 10 14:49:07 2024 -0400
+
+    Added kbm code
+
+[33mcommit 866160fde6f4fbc69e232cfd3748aac5ada135be[m
+Author: Avedis Boudakian <avedisb30@yahoo.com>
+Date:   Sun Mar 10 14:41:59 2024 -0400
+
+    main.cpp deletion
+
+[33mcommit e73b4a7fd4984bff2e3f21502aa4cb3a1d482356[m
+Author: Avedis Boudakian <avedisb30@yahoo.com>
+Date:   Sun Mar 10 14:31:31 2024 -0400
+
+    kbm code
+
+[33mcommit c5ebc9d7bec24afb2bae628750eef137dfb017d3[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Mar 10 14:26:49 2024 -0400
+
+    Change imu to bmi088
+
+[33mcommit f4b397cdf82144b26ebf424e0e07c48967ba8244[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Mar 10 11:41:21 2024 -0400
+
+    Changed to type C taproot
+
+[33mcommit 370db1de02ca89308417da139fb7068fbb502844[m
+Author: tonyyang21 <tonyyang21.2003@gmail.com>
+Date:   Sun Mar 10 11:29:15 2024 -0400
+
+    Renamed repo and team name
+
+[33mcommit 019ea969cc85e75f523cd0abf2f4383cfeb23cc3[m[33m ([m[1;31mtemplate/develop[m[33m)[m
+Merge: 1ef68c4 8c87c4a
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sat Sep 24 15:39:04 2022 +0000
+
+    Merge branch 'MatthewArnold-develop-patch-59894' into 'develop'
+    
+    Update README.md
+    
+    See merge request aruw/controls/taproot-template-project!28
+
+[33mcommit 8c87c4aada47c064bb5d819e302bf7ddc061ee97[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sat Sep 24 15:29:22 2022 +0000
+
+    Update README.md
+
+[33mcommit 1ef68c4d2f67bd7f90ad3c8af8654fc21c93e95f[m
+Merge: e578328 3371851
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Fri May 13 23:17:32 2022 +0000
+
+    Merge branch 'upgrade-taproot' into 'develop'
+    
+    upgrade taproot
+    
+    See merge request aruw/controls/taproot-template-project!27
+
+[33mcommit 33718518ff5793b5db5f02f65a5c1c1cae98a5d0[m
+Author: matthew <mma35@uw.edu>
+Date:   Fri May 13 15:25:17 2022 -0700
+
+    upgrade taproot
+
+[33mcommit e5783281454ba7ec3006a215ecf592f53bb11511[m
+Merge: fca4f87 50da539
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Tue May 10 22:23:15 2022 +0000
+
+    Merge branch 'MatthewArnold-develop-patch-57199' into 'develop'
+    
+    Fix coverage percentage capture
+    
+    See merge request aruw/controls/taproot-template-project!26
+
+[33mcommit 50da5399bf969dc8ecb99d2bc7a4cc58279ebeee[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Tue May 10 22:23:15 2022 +0000
+
+    Fix coverage percentage capture
+
+[33mcommit fca4f87ec996a7a5a976fc3a328c71a487540c8b[m
+Merge: ea9abd5 8dadbea
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Fri May 6 06:32:48 2022 +0000
+
+    Merge branch 'MatthewArnold-develop-patch-74616' into 'develop'
+    
+    Update .gitlab-ci.yml
+    
+    See merge request aruw/controls/taproot-template-project!25
+
+[33mcommit 8dadbea6c49bb1feee1a2b9fb645632851c82d26[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Fri May 6 06:21:17 2022 +0000
+
+    Update .gitlab-ci.yml
+
+[33mcommit ea9abd5b53443972d0ba55af04b4f272376b3683[m
+Merge: c8a1d4f 435fb7e
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Wed Apr 20 17:26:08 2022 +0000
+
+    Merge branch 'MatthewA/rename-template-project-script' into 'develop'
+    
+    add rename template project script
+    
+    See merge request aruw/controls/taproot-template-project!24
+
+[33mcommit 435fb7ede5e907e57f2c2f0480efd75d8d40d891[m
+Author: Matthew <mma35@uw.edu>
+Date:   Tue Apr 19 18:30:51 2022 -0700
+
+    add rename template project script
+
+[33mcommit c8a1d4fc640062cfa121e6621c4b2efde638a106[m
+Merge: 4cbbbca 8a148f9
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Wed Apr 20 02:19:11 2022 +0000
+
+    Merge branch 'MatthewArnold-develop-patch-06308' into 'develop'
+    
+    #12: Add SConscript files to src and test
+    
+    See merge request aruw/controls/taproot-template-project!23
+
+[33mcommit 8a148f9a77d53817b67d6014826bd376fd5d94d1[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Wed Apr 20 02:19:11 2022 +0000
+
+    #12: Add SConscript files to src and test
+
+[33mcommit 4cbbbca71ee1ae93359c11d001ea1c38690cec2f[m
+Merge: 114c33c ef15727
+Author: Manoli P. Tramountanas <manolipt@uw.edu>
+Date:   Fri Apr 15 07:35:33 2022 +0000
+
+    Merge branch 'ManoliT/tap-resync-2' into 'develop'
+    
+    (April 14th, 2022) Taproot Upgrade
+    
+    Closes #13
+    
+    See merge request aruw/controls/taproot-template-project!22
+
+[33mcommit ef15727b3e2348dc589ec6c45c39020c25e96543[m
+Author: manolipt <manolipt@uw.edu>
+Date:   Fri Apr 15 01:54:15 2022 +0000
+
+    Changes to Fix Scons Build and GitLab CI
+    
+    Manually apply the changes in this commit in order to make scons build
+    properly and to ensure that the GitLab CI works as intended/is up to
+    date.
+
+[33mcommit e266de498cc4a0ff9192449d292abfbbeb02a26c[m
+Author: manolipt <manolipt@uw.edu>
+Date:   Fri Apr 15 01:42:14 2022 +0000
+
+    Regenerate Taproot in my-project
+    
+    Run `lbuild build` in `my-project` directory (project folder, not repo
+    root)
+
+[33mcommit f64eed36539c307db2497c00eb059f72cc9c102c[m
+Author: manolipt <manolipt@uw.edu>
+Date:   Fri Apr 15 00:07:29 2022 +0000
+
+    Necessary Manual Changes for Taproot Build
+    
+    Manually apply changes in this commit in order to get lbuild to work
+    again.
+
+[33mcommit a8e1c7d78f8a91dcf631f8a087e7a5c7630cbf52[m
+Author: manolipt <manolipt@uw.edu>
+Date:   Fri Apr 15 00:00:09 2022 +0000
+
+    Added taproot-scripts Submodule
+    
+    Commands Run:
+    `cd my-project-repo # Make sure this is your repo root directory
+    git submodule add https://gitlab.com/aruw/controls/taproot-scripts.git
+    taproot-scripts`
+
+[33mcommit 67b22ee63580c0197799f652527c3e5605e3789e[m
+Author: manolipt <manolipt@uw.edu>
+Date:   Thu Apr 14 23:54:08 2022 +0000
+
+    Update Submodule, Remove Project-Specific Taproot
+    
+    Command Sequence:
+    `cd my-project-repo/taproot
+    git checkout develop
+    git pull
+    git submodule update --init --recursive
+    cd ..
+    
+    git add taproot
+    
+    cd my-project
+    rm -r ./taproot
+    git add taproot/. ../taproot`
+    
+    Then push to new branch
+
+[33mcommit 114c33cef3ecf51056ba7a8be8a5af2b02ca71ee[m
+Merge: 0f7972b 2e37895
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Wed Feb 2 01:24:16 2022 +0000
+
+    Merge branch 'MatthewA/taproot#155/clang-format-all-py' into 'develop'
+    
+    Add clang_format_all.py and use in .gitlab-ci.yml
+    
+    See merge request aruw/controls/taproot-template-project!19
+
+[33mcommit 2e378952a858212e82074c7442f86cfb0ea7375d[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Tue Feb 1 18:35:20 2022 +0000
+
+    Add clang_format_all.py and use in .gitlab-ci.yml
+
+[33mcommit 0f7972ba57a3d3bbd256e603ab00f5fd4384ef5c[m
+Merge: d0ae68f 79edb1d
+Author: Tenzin Low <tenzinhl@uw.edu>
+Date:   Tue Dec 7 17:57:13 2021 +0000
+
+    Merge branch 'TenzinL/#11/c_cpp_properties-query-compiler' into 'develop'
+    
+    Add `compilerPath` to c_cpp_properties
+    
+    See merge request aruw/controls/taproot-template-project!18
+
+[33mcommit 79edb1da19f1609db2f51595fc2a36425ed1f390[m
+Author: Tenzin Low <tenzinhl@uw.edu>
+Date:   Tue Dec 7 17:57:13 2021 +0000
+
+    Add `compilerPath` to c_cpp_properties
+
+[33mcommit d0ae68f8010b5610f2c8ea6bdc83e2cce1ba008b[m
+Merge: 57dadd0 47e16d9
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Wed Nov 24 22:51:01 2021 +0000
+
+    Merge branch 'update-taproot' into 'develop'
+    
+    regenerate taproot and add custom derived drivers object
+    
+    See merge request aruw/controls/taproot-template-project!17
+
+[33mcommit 47e16d94631d8db1f3f5abb20fffa39448f804da[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Wed Nov 24 22:51:01 2021 +0000
+
+    regenerate taproot and add custom derived drivers object
+
+[33mcommit 57dadd09eba69e950efbef8c39b0444027e9f28e[m
+Merge: 930fd6d 99fa194
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Fri Nov 12 17:55:30 2021 +0000
+
+    Merge branch 'KaelinL/regen-sconstruct-variable-rename' into 'develop'
+    
+    Re-generate SConstruct from latest Taproot version
+    
+    See merge request aruw/controls/taproot-template-project!16
+
+[33mcommit 99fa194e8c8d3e32b8e89e8dd9c732d5eda8a41f[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Fri Nov 12 11:29:11 2021 +0000
+
+    Re-generate SConstruct from latest Taproot version
+
+[33mcommit 930fd6d4a4ee76e229a804dca032a3b4361abcb5[m
+Merge: bcab840 568d5b9
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Fri Nov 12 11:16:16 2021 +0000
+
+    Merge branch 'KaelinL/native-setup' into 'develop'
+    
+    Adopt native host OS development environments
+    
+    See merge request aruw/controls/taproot-template-project!15
+
+[33mcommit 568d5b9712b44bba9a45bfe9d43a84b12203a12e[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Wed Nov 10 09:57:15 2021 -0800
+
+    Regenerate taproot after upgrade
+
+[33mcommit c53a4e53a7bcc2ed6f41d571e6e3d2dcc018bfc3[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Wed Nov 10 09:45:39 2021 -0800
+
+    Upgrade project infrastructure for new Taproot version
+
+[33mcommit bcab8402e71adefe150c88122e00d1b961d339ce[m
+Merge: 73e646a 5ba7b0a
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Tue Nov 9 11:33:15 2021 +0000
+
+    Merge branch 'KaelinL/nov-21-bump-taproot' into 'develop'
+    
+    Bump Taproot version (November 2021)
+    
+    See merge request aruw/controls/taproot-template-project!13
+
+[33mcommit 73e646a7da7b2352923dbda5d2410dacff1d18dd[m
+Merge: 0369ae5 b5541e2
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Tue Nov 9 01:23:03 2021 +0000
+
+    Merge branch 'KaelinL/taproot-submodule-url-rename' into 'develop'
+    
+    Update URL used for Taproot submodule clone
+    
+    See merge request aruw/controls/taproot-template-project!14
+
+[33mcommit b5541e2b490547ff873f292077ec6ecae6e7259e[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sat Nov 6 08:28:27 2021 +0000
+
+    Update URL used for Taproot submodule clone
+
+[33mcommit 5ba7b0af9f7da07a57006c75add87b8084dfce64[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Thu Nov 4 15:40:37 2021 -0700
+
+    Bump Taproot and re-generate
+
+[33mcommit bc951cff5754eba5e51f0907940873c967970ea3[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Thu Nov 4 14:32:52 2021 -0700
+
+    Disable sconstruct regeneration
+
+[33mcommit 0369ae58a5e137ed3d248105ad73611693f9954a[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Tue Nov 2 20:35:47 2021 +0000
+
+    Fix "scons run" command listing
+
+[33mcommit a266c7a9acf286b7d0672daab7454698621db050[m
+Merge: 11658ef eaecfb0
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Mon Sep 27 03:47:28 2021 +0000
+
+    Merge branch 'KaelinL/type-c-readme' into 'develop'
+    
+    Update README with instructions for Type C support
+    
+    See merge request aruw/controls/taproot-template-project!12
+
+[33mcommit eaecfb0743207f04deb24acd2dcdd517a95b670b[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Sep 26 05:53:21 2021 +0000
+
+    Update README with instructions for Type C support
+
+[33mcommit 11658ef34c7e7c3b47f47f7cafc05cb00268978f[m
+Merge: 5d9e03a 92c69c7
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Sep 26 05:38:57 2021 +0000
+
+    Merge branch 'KaelinL/upgrade-taproot-sep-2021' into 'develop'
+    
+    Upgrade Taproot (September 2021)
+    
+    See merge request aruw/controls/taproot-template-project!11
+
+[33mcommit 92c69c7834459078481a879c2d89e3961a23dc31[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Sep 26 03:47:19 2021 +0000
+
+    Sep 2021 taproot upgrade: format drivers.hpp
+
+[33mcommit 4badf9fbbf3ec7252b11fed7b246a1d343bac5b8[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Sep 26 03:45:08 2021 +0000
+
+    Sep 2021 taproot upgrade: reintroduce SConstruct customizations
+
+[33mcommit f0a5cb7760c0f5c8ce9c6d423e0f2f8e3bf5c3fa[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Wed Sep 15 01:15:07 2021 +0000
+
+    Sep 2021 taproot upgrade: update starter code
+
+[33mcommit 21d1b45336d065f9a3fd1698c4023736ea074c20[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Tue Sep 14 23:57:26 2021 +0000
+
+    Sep 2021 taproot upgrade: update vscode and CI configs
+
+[33mcommit 45af5b12d659896bbb7d38a57e0da21a4f3f2596[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Tue Sep 14 23:45:39 2021 +0000
+
+    Sep 2021 taproot upgrade: lbuild build
+
+[33mcommit 5c2451e323425b77fde1eba57839e22f9f59271d[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Tue Sep 14 23:25:02 2021 +0000
+
+    Bump Taproot ref and update project.xml accordingly
+
+[33mcommit 5d9e03a9181a746333863eb31e3c03f61633fbe6[m
+Merge: 2e0451c 8a44ac8
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Tue Aug 24 01:29:09 2021 +0000
+
+    Merge branch 'clone-instructions' into 'develop'
+    
+    Add instructions on cloning the repo to the README
+    
+    See merge request aruw/controls/taproot-template-project!10
+
+[33mcommit 8a44ac8d3931bb94b92720a37c8cde9d83640c37[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Thu Aug 5 03:23:58 2021 +0000
+
+    Add instructions on cloning the repo to the README
+
+[33mcommit 2e0451c167001c38d8f0cead8deed5dab03e5768[m
+Merge: d453e53 8bfe6fd
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Wed Jul 28 20:03:02 2021 +0000
+
+    Merge branch 'KaelinL/rename' into 'develop'
+    
+    Rename project: aruwlib -> taproot
+    
+    See merge request aruw/controls/taproot-template-project!9
+
+[33mcommit 8bfe6fd12a6dddb7c5120a4a8cac31427602f46c[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 05:26:54 2021 +0000
+
+    rename: update library submodule
+
+[33mcommit fa07300c5be5886c8719109e66733e55a0b0460a[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 05:26:22 2021 +0000
+
+    rename: update README
+
+[33mcommit 3042f0a07044b542dced401d25299c12452b63be[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 02:51:17 2021 +0000
+
+    rename: misc updates for new name
+
+[33mcommit c85467358870eb2be8cc41e24650db3518fc97f2[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 02:46:31 2021 +0000
+
+    rename: re-generate taproot
+
+[33mcommit f07f11f14d1e19cb226d23ea6375483b73803946[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 02:37:12 2021 +0000
+
+    rename: update lbuild project and scons script
+
+[33mcommit a95de05119636a5a2f5f56ba09e7cfd6a53ca62e[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 02:29:25 2021 +0000
+
+    rename: rename submodule
+
+[33mcommit d453e5366d2015e299592413cf1589afa17ac306[m
+Merge: 7688683 b96847b
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 05:19:58 2021 +0000
+
+    Merge branch 'KaelinL/readme-updates' into 'develop'
+    
+    README: new details, update working, more on copyright
+    
+    See merge request aruw/controls/aruwlib-template-project!8
+
+[33mcommit b96847b51c857cc183b136686fdde2656097d8be[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sun Jul 25 05:19:57 2021 +0000
+
+    README: new details, update working, more on copyright
+
+[33mcommit 7688683fad31297cb384b566d2d4995f29b1e825[m
+Merge: 9c8cff8 aa0784f
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sat Jul 24 23:19:29 2021 +0000
+
+    Merge branch 'KaelinL/#4/ci-reorg-testing' into 'develop'
+    
+    CI: Run tests in separate job from test build; enable CI on non-MR pushes
+    
+    Closes #4
+    
+    See merge request aruw/controls/aruwlib-template-project!6
+
+[33mcommit aa0784f19ef5d13fc1e382aae35c97f8f645e39b[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sat Jul 24 23:19:29 2021 +0000
+
+    CI: Run tests in separate job from test build; enable CI on non-MR pushes
+
+[33mcommit 9c8cff83c6cb1a7eb82c8e1205326c8564302aae[m
+Merge: 68d7eea d187477
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sat Jul 24 06:21:44 2021 +0000
+
+    Merge branch 'KaelinL/disable-driver-hpp-regen' into 'develop'
+    
+    Disable aruwlib:core:generate_driver_hpp in project.xml
+    
+    See merge request aruw/controls/aruwlib-template-project!7
+
+[33mcommit d187477332f8121e35d96e9a827e3976eba1a42f[m
+Author: Kaelin Laundry <wasabifan@outlook.com>
+Date:   Sat Jul 24 05:42:58 2021 +0000
+
+    Disable aruwlib:core:generate_driver_hpp in project.xml
+
+[33mcommit 68d7eea9a777f739b6a29e38ff66490ae61b9208[m
+Merge: 15285b1 8d04b84
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Thu Jul 15 01:09:09 2021 +0000
+
+    Merge branch 'update-robot-type-names' into 'develop'
+    
+    Update robot type names
+    
+    See merge request aruw/controls/aruwlib-template-project!5
+
+[33mcommit 15285b10e171bc86d8aa733ff51ba1ceeac52c3b[m
+Merge: 255594e 51183bf
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Thu Jul 15 00:29:47 2021 +0000
+
+    Merge branch 'MatthewA/#2/write-readme' into 'develop'
+    
+    Add initial README
+    
+    See merge request aruw/controls/aruwlib-template-project!3
+
+[33mcommit 51183bf47731b4b85caa16ae184176fc94ceb959[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Thu Jul 15 00:29:47 2021 +0000
+
+    Add initial README
+
+[33mcommit 255594ef5f6d7283a46fa7c129dd25b6e37cdc9e[m
+Merge: 3449778 ee5d87c
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sun Jul 11 07:59:39 2021 +0000
+
+    Merge branch 'update-submodule' into 'develop'
+    
+    Update aruwlib
+    
+    See merge request aruw/controls/aruwlib-template-project!4
+
+[33mcommit ee5d87c6c984d48ebb72ab4502aeef215ad5b124[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sat Jul 10 22:37:02 2021 -0700
+
+    Update aruwlib
+
+[33mcommit 8d04b844bf1d7c012dabe1390c8537f37159503c[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sat Jul 10 22:34:48 2021 -0700
+
+    Update robot type names
+
+[33mcommit 344977888a01e64df797b18b4110aace317dad16[m
+Merge: 1ee78c0 16a7b30
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Wed Jul 7 19:22:57 2021 +0000
+
+    Merge branch 'MatthewA/#1/add-.vscode' into 'develop'
+    
+    Add .vscode config folder
+    
+    See merge request aruw/controls/aruwlib-template-project!2
+
+[33mcommit 16a7b309904ba51800f6fec7b0e104350f61edfb[m
+Author: matthew <mma35@uw.edu>
+Date:   Wed Jul 7 12:16:55 2021 -0700
+
+    Add .vscode config folder
+
+[33mcommit 1ee78c0dc1bca8301656196aad50143c5ab9bbf6[m
+Merge: 188297d 053acaa
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sat Jul 3 19:00:19 2021 +0000
+
+    Merge branch 'update-ci' into 'develop'
+    
+    Update build tooling and remove references to aruwsrc
+    
+    See merge request aruw/controls/aruwlib-template-project!1
+
+[33mcommit 053acaadf5c1b0e6d6f358313f9b366d61b6635d[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sat Jul 3 19:00:19 2021 +0000
+
+    Update build tooling and remove references to aruwsrc
+
+[33mcommit 188297d49f0cce28a0f51c8bd7f3a6a01a41d985[m
+Author: Matthew Arnold <mma35@uw.edu>
+Date:   Sat Jul 3 01:06:08 2021 -0700
+
+    Create example project from aruw-mcb
