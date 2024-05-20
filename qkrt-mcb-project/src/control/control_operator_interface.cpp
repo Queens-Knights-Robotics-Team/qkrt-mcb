@@ -53,11 +53,11 @@ std::tuple<double, double, double> ControlOperatorInterface::getControllerInput(
     if (!remote.isConnected()) return std::make_tuple(0.0, 0.0, 0.0);
 
     /* use doubles for enhanced precision when processing return values */
-    double x    = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_HORIZONTAL),  -1.0f, 1.0f));
     double y    = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_VERTICAL),    -1.0f, 1.0f));
+    double x    = -1 * static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_HORIZONTAL),  -1.0f, 1.0f));
     double yaw  = static_cast<double>(modm::toRadian(imu.getYaw()));
-    double rotX = x * std::cos(-yaw) - y * std::sin(-yaw);
-    double rotY = x * std::sin(-yaw) + y * std::cos(-yaw);
+    double rotY = x * std::sin(yaw) - y * std::cos(yaw);
+    double rotX = x * std::cos(yaw) + y * std::sin(yaw);
 
     /* constant spin speed for beyblade */
     double rx = 0.0;

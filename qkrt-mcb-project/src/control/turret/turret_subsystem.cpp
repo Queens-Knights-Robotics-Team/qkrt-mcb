@@ -34,7 +34,7 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
       pidControllers{},
       motors{
           Motor(&drivers, config.pitchId, config.canBus, false, "PITCH"),
-          Motor(&drivers, config.yawId,   config.canBus, false, "YAW"),
+          Motor(&drivers, config.yawId,   config.canBus, true, "YAW"),
       }
 {
     for (auto &controller : pidControllers)
