@@ -68,11 +68,11 @@ std::tuple<double, double, double> ControlOperatorInterface::getControllerInput(
 std::tuple<double, double, double> ControlOperatorInterface::getKeyboardInput() const {
     if (!remote.isConnected()) return std::make_tuple(0.0, 0.0, 0.0);
 
-    double x = remote.keyPressed(Remote::Key::D) ? 1.0 : remote.keyPressed(Remote::Key::A) ? -1.0 : 0.0;
+    double x = remote.keyPressed(Remote::Key::D) ? -1.0 : remote.keyPressed(Remote::Key::A) ? 1.0 : 0.0;
     double y = remote.keyPressed(Remote::Key::W) ? 1.0 : remote.keyPressed(Remote::Key::S) ? -1.0 : 0.0;
     double yaw  = static_cast<double>(modm::toRadian(imu.getYaw()));
-    double rotX = x * std::cos(-yaw) - y * std::sin(-yaw);
-    double rotY = x * std::sin(-yaw) + y * std::cos(-yaw);
+    double rotY = x * std::sin(yaw) - y * std::cos(yaw);
+    double rotX = x * std::cos(yaw) + y * std::sin(yaw);
 
     double rx = remote.keyPressed(Remote::Key::SHIFT) ? 0.2 : 0.0;
 
