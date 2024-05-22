@@ -33,8 +33,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
       desiredOutput{},
       pidControllers{},
       motors{
-          Motor(&drivers, config.pitchId, config.canBus, false, "PITCH"),
-          Motor(&drivers, config.yawId,   config.canBus, true, "YAW"),
+          Motor(&drivers, config.pitchId, config.canBus, true, "PITCH"),
+          Motor(&drivers, config.yawId,   config.canBus, false, "YAW"),
       }
 {
     for (auto &controller : pidControllers)
@@ -71,7 +71,7 @@ void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 void TurretSubsystem::refresh()
 {
     auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
-        pid.update(desiredOutput - motor.getShaftRPM());
+        pid.update(desiredOutput - motor.getEncoderUnwrapped());
         motor.setDesiredOutput(pid.getValue());
     };
 

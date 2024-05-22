@@ -61,9 +61,9 @@ Robot::Robot(Drivers &drivers)
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
           turret(drivers, turret::TurretConfig {
                 .pitchId = MotorId::MOTOR6,
-                .yawId = MotorId::MOTOR5,
+                .yawId = MotorId::MOTOR8,
                 .canBus = CanBus::CAN_BUS1,
-                .turretVelocityPidConfig = modm::Pid<float>::Parameter(500,5,0,50000,50000),
+                .turretVelocityPidConfig = modm::Pid<float>::Parameter(35,0,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
