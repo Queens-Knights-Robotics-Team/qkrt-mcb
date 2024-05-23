@@ -44,7 +44,8 @@ struct TurretConfig
     tap::motor::MotorId pitchId;
     tap::motor::MotorId yawId;
     tap::can::CanBus canBus;
-    modm::Pid<float>::Parameter turretVelocityPidConfig;
+    modm::Pid<float>::Parameter turretYawPidConfig;
+    modm::Pid<float>::Parameter turretPitchPidConfig;
 };
 
 ///

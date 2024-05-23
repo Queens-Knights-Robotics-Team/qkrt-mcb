@@ -68,8 +68,8 @@ std::tuple<double, double, double> ControlOperatorInterface::getControllerInput(
 std::tuple<double, double, double> ControlOperatorInterface::getKeyboardInput() const {
     if (!remote.isConnected()) return std::make_tuple(0.0, 0.0, 0.0);
 
-    double x = remote.keyPressed(Remote::Key::D) ? -1.0 : remote.keyPressed(Remote::Key::A) ? 1.0 : 0.0;
-    double y = remote.keyPressed(Remote::Key::W) ? 1.0 : remote.keyPressed(Remote::Key::S) ? -1.0 : 0.0;
+    double x = remote.keyPressed(Remote::Key::D) ? -0.5 : remote.keyPressed(Remote::Key::A) ? 0.5 : 0.0;
+    double y = remote.keyPressed(Remote::Key::W) ? 0.5 : remote.keyPressed(Remote::Key::S) ? -0.5 : 0.0;
     double yaw  = static_cast<double>(modm::toRadian(imu.getYaw()));
     double rotY = x * std::sin(yaw) - y * std::cos(yaw);
     double rotX = x * std::cos(yaw) + y * std::sin(yaw);
@@ -104,11 +104,25 @@ float ControlOperatorInterface::getChassisOmniRightBackInput() {
 }
 
 float ControlOperatorInterface::getTurretPitchInput() {
-    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_VERTICAL),  -1.0f, 1.0f);
+    if (usingController)
+        return std::clamp(remote.getChannel(Remote::Channel::RIGHT_VERTICAL),  -1.0f, 1.0f);
+    else
+        return remote.getMouseY() / -100;
 }
 
 float ControlOperatorInterface::getTurretYawInput() {
-    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL),  -1.0f, 1.0f);
+    if (usingController)
+        return std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL),  -1.0f, 1.0f);
+    else
+        return remote.getMouseX() / 100;
 }
+
+bool ControlOperatorInterface::getFlyWheelInput() {
+    if (usingController)
+        return remote.getMouseR();
+    else
+        return 0;
+}
+
 
 }  // namespace control

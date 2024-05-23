@@ -63,7 +63,8 @@ Robot::Robot(Drivers &drivers)
                 .pitchId = MotorId::MOTOR6,
                 .yawId = MotorId::MOTOR8,
                 .canBus = CanBus::CAN_BUS1,
-                .turretVelocityPidConfig = modm::Pid<float>::Parameter(35,0,0,50000,50000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(35,0,0,50000,50000),
+                .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
@@ -84,7 +85,7 @@ Robot::Robot(Drivers &drivers)
           rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels),
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface),
           leftSwitchUp(&drivers, {&flywheelsCommand}, RemoteMapState(Remote::Switch::LEFT_SWITCH, Remote::SwitchState::UP), true, -1)
 {
 }
@@ -118,6 +119,7 @@ void Robot::setDefaultSoldierCommands()
 {
    chassis.setDefaultCommand(&chassisOmniDrive);
    turret.setDefaultCommand(&turretGimbal);
+   flywheels.setDefaultCommand(&flywheelsCommand);
 }
 
 void Robot::startSoldierCommands() {}

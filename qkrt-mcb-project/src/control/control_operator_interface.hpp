@@ -44,6 +44,8 @@ public:
 
     float getTurretPitchInput();
     float getTurretYawInput();
+
+    bool ControlOperatorInterface::getFlyWheelInput();
 private:
     std::tuple<double, double, double> getControllerInput() const;
     std::tuple<double, double, double> getKeyboardInput() const;

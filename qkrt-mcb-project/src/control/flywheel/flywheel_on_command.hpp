@@ -26,13 +26,18 @@
 
 namespace control
 {
+class ControlOperatorInterface;
+}
+
+namespace control
+{
 namespace flywheel
 {
 class FlywheelOnCommand : public tap::control::Command
 {
 public:
-    FlywheelOnCommand(FlywheelSubsystem *sub)
-        : flywheel(sub)
+    FlywheelOnCommand(FlywheelSubsystem *sub, ControlOperatorInterface &operatorInterface)
+        : flywheel(sub), operatorInterface(operatorInterface)
     {
         addSubsystemRequirement(sub);
     }
@@ -49,6 +54,8 @@ public:
 
 private:
     FlywheelSubsystem *flywheel;
+
+    ControlOperatorInterface& operatorInterface;
 
 };  // class FlywheelOnCommand
 }  // namespace flywheel
