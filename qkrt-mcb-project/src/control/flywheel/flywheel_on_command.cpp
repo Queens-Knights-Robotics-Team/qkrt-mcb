@@ -36,7 +36,7 @@ void FlywheelOnCommand::initialize() {}
 void FlywheelOnCommand::execute() 
 {
     if (operatorInterface.getFlyWheelInput()){
-        flywheel->setDesiredOutput(0.40f); 
+        flywheel->setDesiredOutput(0.30f); 
     } else {
         flywheel->setDesiredOutput(0.25f); 
     }

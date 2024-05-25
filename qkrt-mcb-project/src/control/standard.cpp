@@ -85,8 +85,7 @@ Robot::Robot(Drivers &drivers)
           rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface),
-          leftSwitchUp(&drivers, {&flywheelsCommand}, RemoteMapState(Remote::Switch::LEFT_SWITCH, Remote::SwitchState::UP), true, -1)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface)
 {
 }
 
@@ -128,7 +127,6 @@ void Robot::registerSoldierIoMappings()
 {
     drivers.commandMapper.addMap(&rightSwitchUp);
     drivers.commandMapper.addMap(&HCM);
-    drivers.commandMapper.addMap(&leftSwitchUp);
 }
   
 }  // namespace control

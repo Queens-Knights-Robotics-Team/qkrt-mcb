@@ -72,7 +72,7 @@ private:
     tap::control::HoldRepeatCommandMapping rightSwitchUp;
     tap::control::HoldCommandMapping HCM;
 
-    tap::control::HoldRepeatCommandMapping leftSwitchUp;
+    // tap::control::HoldRepeatCommandMapping leftSwitchUp;
 };
   
 }  // namespace control

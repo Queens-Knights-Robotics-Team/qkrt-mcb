@@ -118,10 +118,13 @@ float ControlOperatorInterface::getTurretYawInput() {
 }
 
 bool ControlOperatorInterface::getFlyWheelInput() {
-    // if (!usingController)
+    if (!usingController)
         return remote.getMouseR();
-    // else
-    //     return 0;
+    else
+        if (static_cast<int>(remote.getSwitch(Remote::Switch::LEFT_SWITCH)) == 1) // 2 is switch up
+            return true;
+        else 
+            return false;
 }
 
 
