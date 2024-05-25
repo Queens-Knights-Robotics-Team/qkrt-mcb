@@ -37,10 +37,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
           Motor(&drivers, config.yawId,   config.canBus, true, "YAW"),
       }
 {
-    for (auto &controller : pidControllers)
-    {
-        controller.setParameter(config.turretVelocityPidConfig);
-    }
+    pidControllers[1].setParameter(config.turret_yaw_VelocityPidConfig);
+    pidControllers[0].setParameter(config.turret_pitch_VelocityPidConfig);
 }
 
 // Initialize function
@@ -72,7 +70,10 @@ void TurretSubsystem::refresh()
 {
     auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
         pid.update(desiredOutput - motor.getShaftRPM());
-        motor.setDesiredOutput(pid.getValue());
+        if (pid.getValue() < 100 && pid.getValue() > -100)
+            motor.setDesiredOutput(0);
+        else
+            motor.setDesiredOutput(pid.getValue());
     };
 
     for (size_t ii = 0; ii < motors.size(); ii++)
