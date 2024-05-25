@@ -127,5 +127,15 @@ bool ControlOperatorInterface::getFlyWheelInput() {
             return false;
 }
 
+bool ControlOperatorInterface::getAgitatorInput() {
+    if (!usingController)
+        return remote.getMouseL();
+    else
+        if (static_cast<int>(remote.getSwitch(Remote::Switch::RIGHT_SWITCH)) == 1) // 1 is switch up
+            return true;
+        else 
+            return false;
+}
+
 
 }  // namespace control

@@ -69,8 +69,8 @@ private:
     agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem;
     
     tap::control::setpoint::MoveIntegralCommand moveIntegralCommand;
-    tap::control::HoldRepeatCommandMapping rightSwitchUp;
-    tap::control::HoldCommandMapping HCM;
+    // tap::control::HoldRepeatCommandMapping rightSwitchUp;
+    // tap::control::HoldCommandMapping HCM;
 
     // tap::control::HoldRepeatCommandMapping leftSwitchUp;
 };

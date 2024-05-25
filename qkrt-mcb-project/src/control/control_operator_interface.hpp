@@ -46,6 +46,7 @@ public:
     float getTurretYawInput();
 
     bool getFlyWheelInput();
+    bool getAgitatorInput();
 private:
     std::tuple<double, double, double> getControllerInput() const;
     std::tuple<double, double, double> getKeyboardInput() const;

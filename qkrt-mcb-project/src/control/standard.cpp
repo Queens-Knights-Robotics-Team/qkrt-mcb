@@ -82,8 +82,8 @@ Robot::Robot(Drivers &drivers)
           },
           velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
           moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
-          rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
-          HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
+          // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
+          // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
           flywheelsCommand(&flywheels, drivers.controlOperatorInterface)
 {
@@ -125,8 +125,8 @@ void Robot::startSoldierCommands() {}
 
 void Robot::registerSoldierIoMappings()
 {
-    drivers.commandMapper.addMap(&rightSwitchUp);
-    drivers.commandMapper.addMap(&HCM);
+    // drivers.commandMapper.addMap(&rightSwitchUp);
+    //drivers.commandMapper.addMap(&HCM);
 }
   
 }  // namespace control
