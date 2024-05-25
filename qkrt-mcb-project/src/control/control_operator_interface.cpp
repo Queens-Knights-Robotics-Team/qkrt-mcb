@@ -118,10 +118,10 @@ float ControlOperatorInterface::getTurretYawInput() {
 }
 
 bool ControlOperatorInterface::getFlyWheelInput() {
-    if (usingController)
+    // if (!usingController)
         return remote.getMouseR();
-    else
-        return 0;
+    // else
+    //     return 0;
 }
 
 
