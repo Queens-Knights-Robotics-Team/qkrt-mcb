@@ -82,6 +82,7 @@ Robot::Robot(Drivers &drivers)
           },
           velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
           moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
+          agitatorCommand(velocityAgitatorSubsystem, drivers.controlOperatorInterface),
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
@@ -119,6 +120,7 @@ void Robot::setDefaultSoldierCommands()
    chassis.setDefaultCommand(&chassisOmniDrive);
    turret.setDefaultCommand(&turretGimbal);
    flywheels.setDefaultCommand(&flywheelsCommand);
+   velocityAgitatorSubsystem.setDefaultCommand(&agitatorCommand);
 }
 
 void Robot::startSoldierCommands() {}

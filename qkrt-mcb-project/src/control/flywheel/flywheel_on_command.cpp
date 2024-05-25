@@ -35,6 +35,8 @@ void FlywheelOnCommand::initialize() {}
 
 void FlywheelOnCommand::execute() 
 {
+    operatorInterface.pollSwitchInputDevice(); 
+    
     if (operatorInterface.getFlyWheelInput())
         flywheel->setDesiredOutput(0.30f); 
     else 
