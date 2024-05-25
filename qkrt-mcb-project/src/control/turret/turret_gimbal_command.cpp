@@ -49,17 +49,13 @@ void TurretGimbalCommand::execute()
         }
         
     };
-    auto scale_yaw = [](float raw) -> float {
-        if (raw > 0) {
-            return (raw*raw) * 0.15;
-        } else {
-            return -(raw*raw) * 0.15;
-        }
+    auto scale_pitch = [](float raw) -> float {
+        return(raw*8191);
         
     };
 
     turret.setVelocityGimbal(
-        operatorInterface.getTurretPitchInput(),
+        operatorInterface.getTurretPitchInput()*8191,
         operatorInterface.getTurretYawInput()
     );
 }

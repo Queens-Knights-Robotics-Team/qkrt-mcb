@@ -64,7 +64,7 @@ Robot::Robot(Drivers &drivers)
                 .yawId = MotorId::MOTOR5,
                 .canBus = CanBus::CAN_BUS1,
                 .turret_yaw_VelocityPidConfig = modm::Pid<float>::Parameter(500,18,0,50000,20000),
-                .turret_pitch_VelocityPidConfig = modm::Pid<float>::Parameter(500,5,0,50000,50000),
+                .turret_pitch_VelocityPidConfig = modm::Pid<float>::Parameter(120,0,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),

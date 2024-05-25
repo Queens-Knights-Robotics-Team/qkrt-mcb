@@ -69,7 +69,7 @@ void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 void TurretSubsystem::refresh()
 {
     auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
-        pid.update(desiredOutput - motor.getShaftRPM());
+        pid.update(desiredOutput - motor.getEncoderUnwrapped());
         if (pid.getValue() < 100 && pid.getValue() > -100)
             motor.setDesiredOutput(0);
         else
@@ -81,4 +81,4 @@ void TurretSubsystem::refresh()
         runPid(pidControllers[ii], motors[ii], desiredOutput[ii]);
     }
 }
-}  // namespace control::turret
+}  // namespace control::turre
