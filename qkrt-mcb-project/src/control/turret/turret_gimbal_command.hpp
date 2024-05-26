@@ -38,7 +38,7 @@ class TurretSubsystem;
 class TurretGimbalCommand : public tap::control::Command
 {
 public:
-    static constexpr float SENSITIVITY = 5.0f;
+    static constexpr float SENSITIVITY = 0.25f;
 
     /**
      * @brief Construct a new Turret Gimbal Command object

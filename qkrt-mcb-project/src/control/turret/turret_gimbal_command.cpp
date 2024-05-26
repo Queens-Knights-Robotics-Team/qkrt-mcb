@@ -42,12 +42,25 @@ TurretGimbalCommand::TurretGimbalCommand(
 void TurretGimbalCommand::execute()
 {
     auto scale = [](float raw) -> float {
-        return limitVal(raw, -1.0f, 1.0f) * SENSITIVITY;
+        if (raw > 0) {
+            return (raw*raw) * 0.15;
+        } else {
+            return -(raw*raw) * SENSITIVITY;
+        }
+        
+    };
+    auto scale_yaw = [](float raw) -> float {
+        if (raw > 0) {
+            return (raw*raw);
+        } else {
+            return -(raw*raw);
+        }
+        
     };
 
     turret.setVelocityGimbal(
         scale(operatorInterface.getTurretPitchInput()),
-        scale(operatorInterface.getTurretYawInput())
+        scale_yaw(operatorInterface.getTurretYawInput())
     );
 }
 

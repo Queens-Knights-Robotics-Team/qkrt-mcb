@@ -17,34 +17,37 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "flywheel_on_command.hpp"
+#include "agitator_command.hpp"
 
-#include "tap/control/command.hpp"
-
-#include "flywheel_subsystem.hpp"
-
-#include "tap/communication/gpio/leds.hpp"
+#include "tap/algorithms/math_user_utils.hpp"
 
 #include "control/control_operator_interface.hpp"
 
-namespace control
-{
-namespace flywheel
-{
-void FlywheelOnCommand::initialize() {}
+#include "velocity_agitator_subsystem.hpp"
 
-void FlywheelOnCommand::execute() 
+using tap::algorithms::limitVal;
+
+namespace control::agitator
 {
-    operatorInterface.pollSwitchInputDevice(); 
-    
-    if (operatorInterface.getFlyWheelInput())
-        flywheel->setDesiredOutput(0.30f); 
-    else 
-        flywheel->setDesiredOutput(0.25f); 
+AgitatorCommand::AgitatorCommand(
+    VelocityAgitatorSubsystem &agitator,
+    ControlOperatorInterface &operatorInterface)
+    : agitator(agitator),
+      operatorInterface(operatorInterface)
+{
+    addSubsystemRequirement(&agitator);
 }
 
-void FlywheelOnCommand::end(bool) { flywheel->setDesiredOutput(0.25f); }
+void AgitatorCommand::execute()
+{
+    operatorInterface.pollSwitchInputDevice(); 
 
-bool FlywheelOnCommand::isFinished() const { return false; }
-}  // namespace flywheel
-}  // namespace control
+    if (operatorInterface.getAgitatorInput()) 
+        agitator.setSetpoint(8);
+    else 
+        agitator.setSetpoint(0);
+}
+
+void AgitatorCommand::end(bool) { agitator.setSetpoint(0); }
+
+};  // namespace control::chassis

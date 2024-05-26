@@ -23,7 +23,6 @@
 #include "tap/control/hold_repeat_command_mapping.hpp"
 #include "tap/control/setpoint/commands/move_integral_command.hpp"
 
-#include "control/agitator/velocity_agitator_subsystem.hpp"
 #include "control/chassis/chassis_subsystem.hpp"
 #include "control/chassis/chassis_omni_drive_command.hpp"
 
@@ -32,6 +31,10 @@
 
 #include "control/flywheel/flywheel_subsystem.hpp"
 #include "control/flywheel/flywheel_on_command.hpp"
+
+#include "control/agitator/velocity_agitator_subsystem.hpp"
+#include "control/agitator/agitator_command.hpp"
+
 
 class Drivers;
 
@@ -67,12 +70,13 @@ private:
     algorithms::EduPidConfig eduPidConfig; 
     tap::control::setpoint::MoveIntegralCommand::Config moveIntegralConfig;
     agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem;
+    agitator::AgitatorCommand agitatorCommand;
     
     tap::control::setpoint::MoveIntegralCommand moveIntegralCommand;
-    tap::control::HoldRepeatCommandMapping rightSwitchUp;
-    tap::control::HoldCommandMapping HCM;
+    // tap::control::HoldRepeatCommandMapping rightSwitchUp;
+    // tap::control::HoldCommandMapping HCM;
 
-    tap::control::HoldRepeatCommandMapping leftSwitchUp;
+    // tap::control::HoldRepeatCommandMapping leftSwitchUp;
 };
   
 }  // namespace control

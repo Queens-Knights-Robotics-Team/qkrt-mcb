@@ -44,11 +44,15 @@ public:
 
     float getTurretPitchInput();
     float getTurretYawInput();
+
+    bool getFlyWheelInput();
+    bool getAgitatorInput();
 private:
     enum class DeviceType {
         CONTROLLER,
         KEYBOARDMOUSE,
     } activeDevice;
+
     tap::communication::serial::Remote& remote;
     tap::communication::sensors::imu::bmi088::Bmi088& imu;
 };
