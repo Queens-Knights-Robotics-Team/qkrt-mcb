@@ -33,82 +33,91 @@ namespace control
 
 #define PI 3.1415927f
 
+struct ControlState {
+    double x = 0.0;
+    double y = 0.0;
+    double w = 0.0;
+    double normFactor = 1.0;
+    double pitch = 0.0;
+    double yaw = 0.0;
+};
+
+static ControlState control_s;
+
 ControlOperatorInterface::ControlOperatorInterface(Remote &remote, Bmi088& imu)
-        : usingController(true), remote(remote), imu(imu) {}
+        : activeDevice(DeviceType::CONTROLLER), remote(remote), imu(imu) {
+}
 
-void ControlOperatorInterface::pollSwitchInputDevice() {
-    static bool pressedLastInterval = false;
+void ControlOperatorInterface::pollInputDevices() {
+    // /* toggle between controller and keyboard mode */
+    // static bool pressedLastInterval = false;
 
-    if (remote.keyPressed(Remote::Key::Q)) {
-        if (!pressedLastInterval) {
-            usingController = !usingController;
-            pressedLastInterval = true;
-        }
-        else return;
+    // if (remote.keyPressed(Remote::Key::Q)) {
+    //     if (!pressedLastInterval) {
+    //         activeDevice = (activeDevice == DeviceType::CONTROLLER) ?
+    //                 DeviceType::KEYBOARDMOUSE : DeviceType::CONTROLLER;
+    //         pressedLastInterval = true;
+    //     }
+    //     else return;
+    // }
+    // else pressedLastInterval = false;
+
+    /* update input state with desired device */
+    // static int16_t lastMouseX = remote.getMouseX();
+    // static int16_t lastMouseY = remote.getMouseY();
+    // int16_t currMouseX = remote.getMouseY();
+    // int16_t currMouseY = remote.getMouseY();
+
+    double rawX, rawY;
+
+    switch (activeDevice) {
+        case DeviceType::CONTROLLER:
+            rawX = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_HORIZONTAL),  -1.0f, 1.0f));
+            rawY = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_VERTICAL),    -1.0f, 1.0f));
+            control_s.pitch = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::RIGHT_VERTICAL),   -1.0f, 1.0f));
+            control_s.yaw   = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL), -1.0f, 1.0f));
+            break;
+        case DeviceType::KEYBOARDMOUSE:
+            rawX = static_cast<double>(remote.keyPressed(Remote::Key::D)) * (double)(0.2)
+                 + static_cast<double>(remote.keyPressed(Remote::Key::A)) * (double)(-0.2);
+            rawY = static_cast<double>(remote.keyPressed(Remote::Key::W)) * (double)(0.2)
+                 + static_cast<double>(remote.keyPressed(Remote::Key::S)) * (double)(-0.2);
+            control_s.pitch = 0.0; // static_cast<double>(lastMouseY - currMouseY) * 0.005;
+            control_s.yaw   = 0.0; // static_cast<double>(currMouseX - lastMouseX) * 0.05;
+            break;
+        default:
+            rawX = rawY = 0.0;
+            control_s.pitch = control_s.yaw = 0.0;
     }
-    else pressedLastInterval = false;
-}
 
-std::tuple<double, double, double> ControlOperatorInterface::getControllerInput() const {
-    if (!remote.isConnected()) return std::make_tuple(0.0, 0.0, 0.0);
-
-    /* use doubles for enhanced precision when processing return values */
-    double x    = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_HORIZONTAL),  -1.0f, 1.0f));
-    double y    = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_VERTICAL),    -1.0f, 1.0f));
-    double yaw  = static_cast<double>(modm::toRadian(imu.getYaw()));
-    double rotX = x * std::cos(-yaw) - y * std::sin(-yaw);
-    double rotY = x * std::sin(-yaw) + y * std::cos(-yaw);
-
-    /* constant spin speed for beyblade */
-    double rx = 0.0;
-    
-    return std::make_tuple(rotX, rotY, rx);
-}
-
-std::tuple<double, double, double> ControlOperatorInterface::getKeyboardInput() const {
-    if (!remote.isConnected()) return std::make_tuple(0.0, 0.0, 0.0);
-
-    double x = remote.keyPressed(Remote::Key::D) ? 1.0 : remote.keyPressed(Remote::Key::A) ? -1.0 : 0.0;
-    double y = remote.keyPressed(Remote::Key::W) ? 1.0 : remote.keyPressed(Remote::Key::S) ? -1.0 : 0.0;
-    double yaw  = static_cast<double>(modm::toRadian(imu.getYaw()));
-    double rotX = x * std::cos(-yaw) - y * std::sin(-yaw);
-    double rotY = x * std::sin(-yaw) + y * std::cos(-yaw);
-
-    double rx = remote.keyPressed(Remote::Key::SHIFT) ? 0.2 : 0.0;
-
-    return std::make_tuple(rotX, rotY, rx);
+    control_s.x = rawX; //rawX * std::cos(-control_s.yaw) - rawY * std::sin(-control_s.yaw);
+    control_s.y = rawY; //rawX * std::sin(-control_s.yaw) + rawY * std::cos(-control_s.yaw);
+    control_s.w = 0.0;
+    control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), (double)(1.0));
 }
 
 float ControlOperatorInterface::getChassisOmniLeftFrontInput() {
-    auto [vx, vy, w] = usingController ? getControllerInput() : getKeyboardInput();
-    double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
-    return (vy + vx + w) / denom;
+    return (control_s.y + control_s.x + control_s.w) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getChassisOmniLeftBackInput() {
-    auto [vx, vy, w] = usingController ? getControllerInput() : getKeyboardInput();
-    double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
-    return (vy - vx + w) / denom;
+    return (control_s.y - control_s.x + control_s.w) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getChassisOmniRightFrontInput() {
-    auto [vx, vy, w] = usingController ? getControllerInput() : getKeyboardInput();
-    double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
-    return (vy - vx - w) / denom;
+    return (control_s.y - control_s.x - control_s.w) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getChassisOmniRightBackInput() {
-    auto [vx, vy, w] = usingController ? getControllerInput() : getKeyboardInput();
-    double denom = std::max(std::abs(vy) + std::abs(vx) + std::abs(w), static_cast<double>(1.0));
-    return (vy + vx - w) / denom;
+    return (control_s.y + control_s.x - control_s.w) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getTurretPitchInput() {
-    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_VERTICAL),  -1.0f, 1.0f);
+    return 0.0; // control_s.pitch;
 }
 
 float ControlOperatorInterface::getTurretYawInput() {
-    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL),  -1.0f, 1.0f);
+    return 0.0; // control_s.yaw;
 }
 
 }  // namespace control

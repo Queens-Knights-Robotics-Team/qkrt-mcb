@@ -51,12 +51,12 @@ namespace control
 Robot::Robot(Drivers &drivers)
         : drivers(drivers),
           chassis(drivers, chassis::ChassisConfig {
-                .leftFrontId = MotorId::MOTOR2,
-                .leftBackId = MotorId::MOTOR3,
-                .rightBackId = MotorId::MOTOR4,
-                .rightFrontId = MotorId::MOTOR1,
+                .leftFrontId = MotorId::MOTOR1,
+                .leftBackId = MotorId::MOTOR2,
+                .rightBackId = MotorId::MOTOR3,
+                .rightFrontId = MotorId::MOTOR4,
                 .canBus = CanBus::CAN_BUS1,
-                .wheelVelocityPidConfig = modm::Pid<float>::Parameter(10,0,0,0,1000),
+                .wheelVelocityPidConfig = modm::Pid<float>::Parameter(15,1,0,1000,10000),
             }),
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
           turret(drivers, turret::TurretConfig {

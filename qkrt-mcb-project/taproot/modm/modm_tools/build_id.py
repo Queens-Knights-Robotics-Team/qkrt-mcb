@@ -10,7 +10,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -----------------------------------------------------------------------------
 
-"""
+R"""
 ### GNU Build-ID
 
 To extract the build ID from an ELF file:
