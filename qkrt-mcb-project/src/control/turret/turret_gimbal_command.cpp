@@ -55,7 +55,7 @@ void TurretGimbalCommand::execute()
     };
 
     turret.setVelocityGimbal(
-        operatorInterface.getTurretPitchInput()*8190,
+        operatorInterface.getTurretPitchInput()*4000, // should be *8191
         operatorInterface.getTurretYawInput()
     );
 }
