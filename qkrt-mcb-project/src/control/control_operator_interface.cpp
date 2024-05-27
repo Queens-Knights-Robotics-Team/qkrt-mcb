@@ -104,11 +104,17 @@ float ControlOperatorInterface::getChassisOmniRightBackInput() {
 }
 
 float ControlOperatorInterface::getTurretPitchInput() {
-    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_VERTICAL),  -1.0f, 1.0f);
+    if (usingController)
+        return std::clamp(remote.getChannel(Remote::Channel::RIGHT_VERTICAL),  -1.0f, 1.0f);
+    else
+        return remote.getMouseY() / -60.0f;
 }
 
 float ControlOperatorInterface::getTurretYawInput() {
-    return std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL),  -1.0f, 1.0f);
+    if (usingController)
+        return std::clamp(remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL),  -1.0f, 1.0f);
+    else
+        return remote.getMouseX() / 60.0f;
 }
 
 }  // namespace control

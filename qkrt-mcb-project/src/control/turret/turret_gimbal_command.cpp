@@ -27,6 +27,11 @@
 
 using tap::algorithms::limitVal;
 
+float curr_pitch_input=0;
+static constexpr uint16_t ENC_RESOLUTION = 8192;
+float min_pitch=-25;
+float max_pitch=50;
+
 namespace control::turret
 {
 
@@ -37,6 +42,12 @@ TurretGimbalCommand::TurretGimbalCommand(
       operatorInterface(operatorInterface)
 {
     addSubsystemRequirement(&turret);
+}
+
+
+float TurretGimbalCommand::getAngle(float enc_val)
+{
+    return 360 / static_cast<float>(ENC_RESOLUTION) * enc_val ;
 }
 
 void TurretGimbalCommand::execute()
@@ -54,8 +65,17 @@ void TurretGimbalCommand::execute()
         
     };
 
+    curr_pitch_input+=getAngle(operatorInterface.getTurretPitchInput()*10);
+
+    float lim_pitch_angle = limitVal(curr_pitch_input, min_pitch, max_pitch);
+    
+    if(lim_pitch_angle!=curr_pitch_input)
+    {
+        curr_pitch_input=lim_pitch_angle;
+    }
+
     turret.setVelocityGimbal(
-        operatorInterface.getTurretPitchInput()*4000, // should be *8191
+        curr_pitch_input, 
         operatorInterface.getTurretYawInput()
     );
 }

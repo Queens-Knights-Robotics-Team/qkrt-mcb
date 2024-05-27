@@ -100,6 +100,9 @@ private:
     float MAX_RPM = 300.0f;
     float MAX_MV = 25000.0f;
     
+    float getYawEnc(float angle);
+
+
     float rpmToMilliVolts(float rpm)
     {
         return rpm * MAX_MV / MAX_RPM;

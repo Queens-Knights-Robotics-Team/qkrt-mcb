@@ -26,11 +26,6 @@
 using tap::algorithms::limitVal;
 
 static constexpr uint16_t ENC_RESOLUTION = 8192;
-static constexpr float AGITATOR_GEAR_RATIO_M2006 = 1.0f;
-float pitch_angle;
-float min_pitch=-36;
-float max_pitch=46;
-
 
 namespace control::turret
 {
@@ -58,25 +53,24 @@ void TurretSubsystem::initialize()
 }
 
 
+float TurretSubsystem::getYawEnc(float angle)
+{
+    return (angle  * ENC_RESOLUTION) / 360;
+}
+
+
 // setVelocityGimbal function
 void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 {
-    pitch_angle=360 / static_cast<float>(ENC_RESOLUTION) * pitch / AGITATOR_GEAR_RATIO_M2006;
-    float lim_pitch_angle = limitVal(pitch_angle,min_pitch, max_pitch);
-    
-    float start_pitch= (27* AGITATOR_GEAR_RATIO_M2006 * ENC_RESOLUTION) / 360;
+    float start_pitch= getYawEnc(27);
 
-    if(lim_pitch_angle!=pitch_angle)
-    {
-        pitch= (lim_pitch_angle * AGITATOR_GEAR_RATIO_M2006 * ENC_RESOLUTION) / 360;
-    }
+    float pitch_angle=getYawEnc(pitch);
 
-    yaw   = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
+    yaw = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
 
-    desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yaw;
+    desiredOutput[static_cast<uint8_t>(MotorId::YAW)] = yaw;
 
-    desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch+start_pitch;
-
+    desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch_angle+start_pitch;
 
 }
 
