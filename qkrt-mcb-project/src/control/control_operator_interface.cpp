@@ -56,8 +56,8 @@ std::tuple<double, double, double> ControlOperatorInterface::getControllerInput(
     double y    = static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_VERTICAL),    -1.0f, 1.0f));
     double x    = -1 * static_cast<double>(std::clamp(remote.getChannel(Remote::Channel::LEFT_HORIZONTAL),  -1.0f, 1.0f));
     double yaw  = static_cast<double>(modm::toRadian(imu.getYaw()));
-    double rotY = x * std::sin(yaw) - y * std::cos(yaw);
     double rotX = x * std::cos(yaw) + y * std::sin(yaw);
+    double rotY = x * std::sin(yaw) - y * std::cos(yaw);
 
     /* constant spin speed for beyblade */
     double rx = 0.0;
