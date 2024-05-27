@@ -58,6 +58,8 @@ public:
     bool isFinished() const { return false; }
 
 private:
+    float getAngle(float enc_val);
+
     TurretSubsystem& turret;
 
     ControlOperatorInterface& operatorInterface;

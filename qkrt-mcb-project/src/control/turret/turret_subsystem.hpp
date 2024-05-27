@@ -44,8 +44,8 @@ struct TurretConfig
     tap::motor::MotorId pitchId;
     tap::motor::MotorId yawId;
     tap::can::CanBus canBus;
-    modm::Pid<float>::Parameter turretYawPidConfig;
-    modm::Pid<float>::Parameter turretPitchPidConfig;
+    modm::Pid<float>::Parameter turret_yaw_VelocityPidConfig;
+    modm::Pid<float>::Parameter turret_pitch_VelocityPidConfig;
 };
 
 ///
@@ -100,6 +100,9 @@ private:
     float MAX_RPM = 300.0f;
     float MAX_MV = 25000.0f;
     
+    float getYawEnc(float angle);
+
+
     float rpmToMilliVolts(float rpm)
     {
         return rpm * MAX_MV / MAX_RPM;

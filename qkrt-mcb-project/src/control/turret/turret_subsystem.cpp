@@ -25,6 +25,8 @@
 
 using tap::algorithms::limitVal;
 
+static constexpr uint16_t ENC_RESOLUTION = 8192;
+
 namespace control::turret
 {
 // create constructor
@@ -37,8 +39,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
           Motor(&drivers, config.yawId,   config.canBus, false, "YAW"),
       }
 {
-    pidControllers[0].setParameter(config.turretPitchPidConfig);
-    pidControllers[1].setParameter(config.turretYawPidConfig);
+    pidControllers[1].setParameter(config.turret_yaw_VelocityPidConfig);
+    pidControllers[0].setParameter(config.turret_pitch_VelocityPidConfig);
 }
 
 // Initialize function
@@ -50,28 +52,43 @@ void TurretSubsystem::initialize()
     }
 }
 
+
+float TurretSubsystem::getYawEnc(float angle)
+{
+    return (angle  * ENC_RESOLUTION) / 360;
+}
+
+
 // setVelocityGimbal function
 void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 {
-    pitch = limitVal(rpmToMilliVolts(pitch), -MAX_MV, MAX_MV);
-    yaw   = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
+    float start_pitch= getYawEnc(27);
 
-    // desiredOutput takes milliVolts as input
-    desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch;
-    desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yaw;
+    float pitch_angle=getYawEnc(pitch);
+
+    yaw = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
+
+    desiredOutput[static_cast<uint8_t>(MotorId::YAW)] = yaw;
+
+    desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch_angle+start_pitch;
+
 }
 
 // refresh function
 void TurretSubsystem::refresh()
 {
-    auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
-        pid.update(desiredOutput - motor.getShaftRPM());
-        motor.setDesiredOutput(pid.getValue());
-    };
 
-    for (size_t ii = 0; ii < motors.size(); ii++)
-    {
-        runPid(pidControllers[ii], motors[ii], desiredOutput[ii]);
-    }
+    //pitch position control
+    pidControllers[0].update(desiredOutput[0]-motors[0].getEncoderUnwrapped());
+    motors[0].setDesiredOutput(pidControllers[0].getValue());
+
+    //yaw velocity control
+    pidControllers[1].update(desiredOutput[1]-motors[1].getShaftRPM());
+    if (pidControllers[1].getValue() < 100 && pidControllers[1].getValue() > -100)
+        motors[1].setDesiredOutput(0);
+    else
+        motors[1].setDesiredOutput(pidControllers[1].getValue());
+
+
 }
-}  // namespace control::turret
+}  // namespace control::turre
