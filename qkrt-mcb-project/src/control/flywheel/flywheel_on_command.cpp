@@ -34,11 +34,11 @@ namespace flywheel
 void FlywheelOnCommand::initialize() {}
 
 void FlywheelOnCommand::execute() 
-{
-    operatorInterface.pollSwitchInputDevice(); 
-    
+{    
+    operatorInterface.pollInputDevices();
+
     if (operatorInterface.getFlyWheelInput())
-        flywheel->setDesiredOutput(0.30f); 
+        flywheel->setDesiredOutput(3.8f);
     else 
         flywheel->setDesiredOutput(0.25f); 
 }
