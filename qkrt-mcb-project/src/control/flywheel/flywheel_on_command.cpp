@@ -24,13 +24,24 @@
 #include "flywheel_subsystem.hpp"
 
 #include "tap/communication/gpio/leds.hpp"
+
+#include "control/control_operator_interface.hpp"
+
 namespace control
 {
 namespace flywheel
 {
 void FlywheelOnCommand::initialize() {}
 
-void FlywheelOnCommand::execute() { flywheel->setDesiredOutput(0.40f); }
+void FlywheelOnCommand::execute() 
+{    
+    operatorInterface.pollInputDevices();
+
+    if (operatorInterface.getFlyWheelInput())
+        flywheel->setDesiredOutput(0.38f);
+    else 
+        flywheel->setDesiredOutput(0.25f); 
+}
 
 void FlywheelOnCommand::end(bool) { flywheel->setDesiredOutput(0.25f); }
 

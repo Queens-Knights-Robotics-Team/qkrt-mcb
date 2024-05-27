@@ -17,43 +17,37 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "chassis_omni_drive_command.hpp"
+#include "agitator_command.hpp"
 
 #include "tap/algorithms/math_user_utils.hpp"
 
 #include "control/control_operator_interface.hpp"
 
-#include "chassis_subsystem.hpp"
+#include "velocity_agitator_subsystem.hpp"
 
 using tap::algorithms::limitVal;
 
-namespace control::chassis
+namespace control::agitator
 {
-ChassisOmniDriveCommand::ChassisOmniDriveCommand(
-    ChassisSubsystem &chassis,
+AgitatorCommand::AgitatorCommand(
+    VelocityAgitatorSubsystem &agitator,
     ControlOperatorInterface &operatorInterface)
-    : chassis(chassis),
+    : agitator(agitator),
       operatorInterface(operatorInterface)
 {
-    addSubsystemRequirement(&chassis);
+    addSubsystemRequirement(&agitator);
 }
 
-void ChassisOmniDriveCommand::execute()
+void AgitatorCommand::execute()
 {
     operatorInterface.pollInputDevices();
 
-    auto scale = [](float raw) -> float {
-        return limitVal(raw, -1.0f, 1.0f) * MAX_CHASSIS_SPEED_MPS;
-    };
-
-    chassis.setVelocityOmniDrive(
-        scale(operatorInterface.getChassisOmniLeftFrontInput()),
-        scale(operatorInterface.getChassisOmniLeftBackInput()),
-        scale(operatorInterface.getChassisOmniRightFrontInput()),
-        scale(operatorInterface.getChassisOmniRightBackInput())
-    );
+    if (operatorInterface.getAgitatorInput()) 
+        agitator.setSetpoint(8);
+    else 
+        agitator.setSetpoint(0);
 }
 
-void ChassisOmniDriveCommand::end(bool) { chassis.setVelocityOmniDrive(.0f, .0f, .0f, .0f); }
+void AgitatorCommand::end(bool) { agitator.setSetpoint(0); }
 
 };  // namespace control::chassis

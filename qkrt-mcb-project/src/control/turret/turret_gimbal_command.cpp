@@ -51,9 +51,9 @@ void TurretGimbalCommand::execute()
     };
     auto scale_yaw = [](float raw) -> float {
         if (raw > 0) {
-            return (raw*raw) * 0.15;
+            return (raw*raw);
         } else {
-            return -(raw*raw) * 0.15;
+            return -(raw*raw);
         }
         
     };

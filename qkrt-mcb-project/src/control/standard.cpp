@@ -61,9 +61,10 @@ Robot::Robot(Drivers &drivers)
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
           turret(drivers, turret::TurretConfig {
                 .pitchId = MotorId::MOTOR6,
-                .yawId = MotorId::MOTOR5,
+                .yawId = MotorId::MOTOR8,
                 .canBus = CanBus::CAN_BUS1,
-                .turretVelocityPidConfig = modm::Pid<float>::Parameter(500,5,0,50000,50000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(35,0,0,50000,50000),
+                .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
@@ -81,11 +82,11 @@ Robot::Robot(Drivers &drivers)
           },
           velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
           moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
-          rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
-          HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
+          agitatorCommand(velocityAgitatorSubsystem, drivers.controlOperatorInterface),
+          // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
+          // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels),
-          leftSwitchUp(&drivers, {&flywheelsCommand}, RemoteMapState(Remote::Switch::LEFT_SWITCH, Remote::SwitchState::UP), true, -1)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface)
 {
 }
 
@@ -118,15 +119,16 @@ void Robot::setDefaultSoldierCommands()
 {
    chassis.setDefaultCommand(&chassisOmniDrive);
    turret.setDefaultCommand(&turretGimbal);
+   flywheels.setDefaultCommand(&flywheelsCommand);
+   velocityAgitatorSubsystem.setDefaultCommand(&agitatorCommand);
 }
 
 void Robot::startSoldierCommands() {}
 
 void Robot::registerSoldierIoMappings()
 {
-    drivers.commandMapper.addMap(&rightSwitchUp);
-    drivers.commandMapper.addMap(&HCM);
-    drivers.commandMapper.addMap(&leftSwitchUp);
+    // drivers.commandMapper.addMap(&rightSwitchUp);
+    //drivers.commandMapper.addMap(&HCM);
 }
   
 }  // namespace control

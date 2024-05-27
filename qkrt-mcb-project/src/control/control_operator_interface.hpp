@@ -35,7 +35,7 @@ public:
     ControlOperatorInterface(tap::communication::serial::Remote& remote,
                              tap::communication::sensors::imu::bmi088::Bmi088& imu);
 
-    void pollSwitchInputDevice();
+    void pollInputDevices();
 
     float getChassisOmniLeftFrontInput();
     float getChassisOmniLeftBackInput();
@@ -44,11 +44,15 @@ public:
 
     float getTurretPitchInput();
     float getTurretYawInput();
+
+    bool getFlyWheelInput();
+    bool getAgitatorInput();
 private:
-    std::tuple<double, double, double> getControllerInput() const;
-    std::tuple<double, double, double> getKeyboardInput() const;
-private:
-    bool usingController;
+    enum class DeviceType {
+        CONTROLLER,
+        KEYBOARDMOUSE,
+    } activeDevice;
+
     tap::communication::serial::Remote& remote;
     tap::communication::sensors::imu::bmi088::Bmi088& imu;
 };

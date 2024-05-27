@@ -17,48 +17,38 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef FLYWHEEL_ON_COMMAND_HPP_
-#define FLYWHEEL_ON_COMMAND_HPP_
+#pragma once
 
 #include "tap/control/command.hpp"
-
-#include "flywheel_subsystem.hpp"
 
 namespace control
 {
 class ControlOperatorInterface;
 }
 
-namespace control
+namespace control::agitator
 {
-namespace flywheel
-{
-class FlywheelOnCommand : public tap::control::Command
+class VelocityAgitatorSubsystem;
+
+class AgitatorCommand : public tap::control::Command
 {
 public:
-    FlywheelOnCommand(FlywheelSubsystem *sub, ControlOperatorInterface &operatorInterface)
-        : flywheel(sub), operatorInterface(operatorInterface)
-    {
-        addSubsystemRequirement(sub);
-    }
+    AgitatorCommand(VelocityAgitatorSubsystem &agitator, ControlOperatorInterface &operatorInterface);
 
-    void initialize() override;
+    const char *getName() const override { return "Chassis omni drive"; }
+
+    void initialize() override {}
 
     void execute() override;
 
     void end(bool interrupted) override;
 
-    bool isFinished() const override;
-
-    const char *getName() const override { return "flywheel on command"; }
+    bool isFinished() const { return false; }
 
 private:
-    FlywheelSubsystem *flywheel;
+    VelocityAgitatorSubsystem &agitator;
 
-    ControlOperatorInterface& operatorInterface;
+    ControlOperatorInterface &operatorInterface;
+};
 
-};  // class FlywheelOnCommand
-}  // namespace flywheel
-}  // namespace control
-
-#endif  // FLYWHEEL_ON_COMMAND_HPP_
+}  // namespace control::chassis
