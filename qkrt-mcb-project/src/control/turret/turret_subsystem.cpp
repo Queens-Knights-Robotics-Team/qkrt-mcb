@@ -23,6 +23,8 @@
 
 #include "drivers.hpp"
 
+#include "../internal.hpp"
+
 using tap::algorithms::limitVal;
 
 static constexpr uint16_t ENC_RESOLUTION = 8192;
@@ -74,10 +76,11 @@ void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 
 }
 
-// refresh function
+static constexpr float NumAngles   = (2 << 12);    // the number of distinguishable angles of the motor
+static constexpr float TurretError = 0x0430;
+
 void TurretSubsystem::refresh()
 {
-
     //pitch position control
     pidControllers[0].update(desiredOutput[0]-motors[0].getEncoderUnwrapped());
     motors[0].setDesiredOutput(pidControllers[0].getValue());
@@ -89,6 +92,8 @@ void TurretSubsystem::refresh()
     else
         motors[1].setDesiredOutput(pidControllers[1].getValue());
 
-
+    float rawAngle =static_cast<float>(
+        motors[static_cast<uint8_t>(MotorId::YAW)].getEncoderUnwrapped()) * 0.5f - TurretError;
+    internal::turretYaw =  rawAngle / NumAngles * M_TWOPI;
 }
-}  // namespace control::turre
+}  // namespace control::turret,,,,,,,,,,,,,,,,,,,,,j
