@@ -40,7 +40,7 @@ AgitatorCommand::AgitatorCommand(
 
 void AgitatorCommand::execute()
 {
-    operatorInterface.pollSwitchInputDevice(); 
+    operatorInterface.pollInputDevices();
 
     if (operatorInterface.getAgitatorInput()) 
         agitator.setSetpoint(8);

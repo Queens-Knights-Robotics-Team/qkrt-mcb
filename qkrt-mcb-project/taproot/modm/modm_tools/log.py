@@ -10,7 +10,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 # -----------------------------------------------------------------------------
 
-"""
+R"""
 ### Logging
 
 Usually logging is done simply via a serial port and only a USB-Serial adapter

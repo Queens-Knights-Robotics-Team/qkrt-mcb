@@ -17,34 +17,13 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "flywheel_on_command.hpp"
+#pragma once
 
-#include "tap/control/command.hpp"
+#include <stdint.h>
 
-#include "flywheel_subsystem.hpp"
+struct internal {
 
-#include "tap/communication/gpio/leds.hpp"
+static inline float turretYaw = 0.0f;
 
-#include "control/control_operator_interface.hpp"
+};
 
-namespace control
-{
-namespace flywheel
-{
-void FlywheelOnCommand::initialize() {}
-
-void FlywheelOnCommand::execute() 
-{    
-    operatorInterface.pollInputDevices();
-
-    if (operatorInterface.getFlyWheelInput())
-        flywheel->setDesiredOutput(0.35f);
-    else 
-        flywheel->setDesiredOutput(0.25f); 
-}
-
-void FlywheelOnCommand::end(bool) { flywheel->setDesiredOutput(0.25f); }
-
-bool FlywheelOnCommand::isFinished() const { return false; }
-}  // namespace flywheel
-}  // namespace control
