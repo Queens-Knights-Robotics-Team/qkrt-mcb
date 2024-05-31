@@ -53,7 +53,8 @@ struct ControlState {
 static ControlState control_s;
 
 ControlOperatorInterface::ControlOperatorInterface(Remote &remote, Bmi088& imu)
-        : activeDevice(DeviceType::CONTROLLER), remote(remote), imu(imu) {
+    : activeDevice(DeviceType::CONTROLLER), remote(remote), imu(imu) 
+{
 }
 
 void ControlOperatorInterface::pollInputDevices() {
@@ -79,7 +80,7 @@ void ControlOperatorInterface::pollInputDevices() {
             rawX = remote.getChannel(Remote::Channel::LEFT_HORIZONTAL);
             rawY = remote.getChannel(Remote::Channel::LEFT_VERTICAL);
             control_s.pitch = remote.getChannel(Remote::Channel::RIGHT_VERTICAL);
-            control_s.yaw   = remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL) - control_s.w;
+            control_s.yaw   = remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL) + imu.getGz()/240;
             control_s.flywheel = remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::UP;
             control_s.agitator = remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP;
             wheelInput = remote.getWheel();
@@ -92,7 +93,7 @@ void ControlOperatorInterface::pollInputDevices() {
             rawX = remote.keyPressed(Remote::Key::D) * control_s.moveSpeed + remote.keyPressed(Remote::Key::A) * -control_s.moveSpeed;
             rawY = remote.keyPressed(Remote::Key::W) * control_s.moveSpeed + remote.keyPressed(Remote::Key::S) * -control_s.moveSpeed;
             control_s.pitch = -static_cast<float>(remote.getMouseY()) * control_s.pitchSensitivity;
-            control_s.yaw   =  static_cast<float>(remote.getMouseX()) * control_s.yawSensitivity - control_s.w;
+            control_s.yaw   =  static_cast<float>(remote.getMouseX()) * control_s.yawSensitivity + imu.getGz()/240;
             control_s.flywheel = remote.getMouseR();
             control_s.agitator = remote.getMouseL();
             control_s.beyblade =
