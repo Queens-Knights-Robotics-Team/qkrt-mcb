@@ -56,6 +56,7 @@ int main()
 
     Board::initialize();
     initializeIo(drivers);
+    modm::delay_ms(1000);
     robot.initSubsystemCommands();
 
     while (1)
@@ -85,6 +86,8 @@ static void initializeIo(Drivers *drivers)
     drivers->errorController.init();
     drivers->remote.initialize();
     drivers->bmi088.initialize(IMU_SAMPLE_FREQUENCY, MAHONY_KP, MAHONY_KI);
+    drivers->bmi088.requestRecalibration();
+    modm::delay_ms(1000);
     drivers->refSerial.initialize();
     drivers->terminalSerial.initialize();
     drivers->schedulerTerminalHandler.init();

@@ -21,6 +21,7 @@
 
 #if defined(TARGET_STANDARD)
 #include "standard.hpp"
-#else
-#error "standard only robot supported"
+#endif
+#if defined(TARGET_JIM)
+#include "hero.hpp"
 #endif

@@ -53,16 +53,7 @@ float TurretGimbalCommand::getAngle(float enc_val)
 void TurretGimbalCommand::execute()
 {
     auto scale = [](float raw) -> float {
-        if (raw > 0) {
-            return (raw*raw) * 0.15;
-        } else {
-            return -(raw*raw) * SENSITIVITY;
-        }
-        
-    };
-    auto scale_pitch = [](float raw) -> float {
-        return(raw*8191);
-        
+        return limitVal(raw, -1.0f, 1.0f) * MAX_TURRET_SPEED_MPS;
     };
 
     curr_pitch_input+=getAngle(operatorInterface.getTurretPitchInput()*10);

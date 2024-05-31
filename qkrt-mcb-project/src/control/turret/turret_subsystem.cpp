@@ -41,8 +41,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
           Motor(&drivers, config.yawId,   config.canBus, false, "YAW"),
       }
 {
-    pidControllers[1].setParameter(config.turret_yaw_VelocityPidConfig);
-    pidControllers[0].setParameter(config.turret_pitch_VelocityPidConfig);
+    pidControllers[1].setParameter(config.turretYawPidConfig);
+    pidControllers[0].setParameter(config.turretPitchPidConfig);
 }
 
 // Initialize function
