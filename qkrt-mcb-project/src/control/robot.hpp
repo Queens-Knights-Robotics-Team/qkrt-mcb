@@ -21,7 +21,6 @@
 
 #if defined(TARGET_STANDARD)
 #include "standard.hpp"
-#endif
-#if defined(TARGET_JIM)
+#elif defined(TARGET_HERO)
 #include "hero.hpp"
 #endif
