@@ -38,7 +38,7 @@ void FlywheelOnCommand::execute()
     operatorInterface.pollInputDevices();
 
     if (operatorInterface.getFlyWheelInput())
-        flywheel->setDesiredOutput(0.38f);
+        flywheel->setDesiredOutput(0.35f);
     else 
         flywheel->setDesiredOutput(0.25f); 
 }
