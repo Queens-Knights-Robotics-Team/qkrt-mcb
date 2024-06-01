@@ -17,7 +17,7 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "standard.hpp"
+#include "hero.hpp"
 #include "drivers_singleton.hpp"
 
 #include "tap/util_macros.hpp"

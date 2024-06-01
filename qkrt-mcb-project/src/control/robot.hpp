@@ -19,8 +19,8 @@
 
 #pragma once
 
-#if defined(TARGET_STANDARD)
-#include "standard.hpp"
+#if defined(TARGET_HERO)
+#include "hero.hpp"
 #else
 #error "standard only robot supported"
 #endif
