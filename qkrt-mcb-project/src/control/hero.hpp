@@ -16,8 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#pragma once
+#if defined(TARGET_HERO)
 
 #include "tap/control/hold_command_mapping.hpp"
 #include "tap/control/hold_repeat_command_mapping.hpp"
@@ -80,3 +79,5 @@ private:
 };
   
 }  // namespace control
+
+#endif

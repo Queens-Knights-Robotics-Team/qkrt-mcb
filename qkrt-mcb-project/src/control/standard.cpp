@@ -17,6 +17,7 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#if defined(TARGET_STANDARD)
 #include "standard.hpp"
 #include "drivers_singleton.hpp"
 
@@ -132,3 +133,5 @@ void Robot::registerSoldierIoMappings()
 }
   
 }  // namespace control
+
+#endif

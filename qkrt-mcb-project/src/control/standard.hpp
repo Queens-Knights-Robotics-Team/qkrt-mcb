@@ -17,7 +17,7 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
+#if defined(TARGET_STANDARD)
 
 #include "tap/control/hold_command_mapping.hpp"
 #include "tap/control/hold_repeat_command_mapping.hpp"
@@ -80,3 +80,5 @@ private:
 };
   
 }  // namespace control
+
+#endif

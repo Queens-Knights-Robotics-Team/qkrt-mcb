@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
+#if defined(TARGET_HERO)
 
 #include "hero.hpp"
 #include "drivers_singleton.hpp"
@@ -132,3 +133,5 @@ void Robot::registerSoldierIoMappings()
 }
   
 }  // namespace control
+
+#endif

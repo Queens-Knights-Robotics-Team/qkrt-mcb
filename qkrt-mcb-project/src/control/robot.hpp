@@ -17,10 +17,11 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
 
 #if defined(TARGET_STANDARD)
 #include "standard.hpp"
-#elif defined(TARGET_HERO)
-#include "hero.hpp"
+#include "standard.cpp"
+// #elif defined(TARGET_HERO)
+// #include "hero.hpp"
+// #include "hero.cpp"
 #endif
