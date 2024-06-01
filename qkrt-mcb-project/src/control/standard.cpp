@@ -61,9 +61,18 @@ Robot::Robot(Drivers &drivers)
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
           turret(drivers, turret::TurretConfig {
                 .pitchId = MotorId::MOTOR6,
-                .yawId = MotorId::MOTOR8,
+                // Hero is 8 || Standard is 5
+                .yawId = MotorId::MOTOR5,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(100,1,0,500000,1000000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(100,1.2,1,500000,1000000),
+                // Original Parameters: Parameter(100,1,0,500000,1000000)
+                // Test 1 Parameters: Parameter(100,0.5,0,500000,1000000) : NA, spins CC
+                // Test 2 Parameters: Parameter(100,0.8,0,500000,1000000) : Floars alot
+                // Test 3 Parameters: Parameter(100,1.2,0,500000,1000000) : Mesureable overshoot(8/10)
+                // Test 4 Parameters: Parameter(100,1.5,0,500000,1000000) : Significant overshoot(5/10)
+                // Test 5 Parameters: Parameter(100,1.2,0.5,500000,1000000) : Significant over shoot(4/10)
+                // Test 6 Parameters: Parameter(100,1.2,1,500000,1000000) : decent over shoot(3/10)
+                // Test 5 Parameters: Parameter(100,1.2,1.5,500000,1000000) : 
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),

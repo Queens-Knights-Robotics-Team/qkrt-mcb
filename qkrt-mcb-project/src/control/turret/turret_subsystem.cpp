@@ -35,8 +35,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
       desiredOutput{},
       pidControllers{},
       motors{
-          Motor(&drivers, config.pitchId, config.canBus, true, "PITCH"),
-          Motor(&drivers, config.yawId,   config.canBus, false, "YAW"),
+          Motor(&drivers, config.pitchId, config.canBus, false, "PITCH"),
+          Motor(&drivers, config.yawId,   config.canBus, true, "YAW"),
       }
 {
     pidControllers[0].setParameter(config.turretPitchPidConfig);
@@ -79,7 +79,7 @@ void TurretSubsystem::refresh()
     }
 
     float rawAngle =static_cast<float>(
-        motors[static_cast<uint8_t>(MotorId::YAW)].getEncoderUnwrapped()) * 0.5f - TurretError;
+        motors[static_cast<uint8_t>(MotorId::YAW)].getEncoderUnwrapped()) - TurretError;
     internal::turretYaw =  rawAngle / NumAngles * M_TWOPI;
 }
-}  // namespace control::turret,,,,,,,,,,,,,,,,,,,,,j
+}  // namespace control::turret
