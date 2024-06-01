@@ -27,8 +27,6 @@
 
 #include "drivers_singleton.hpp"
 
-#include "control/robot.hpp"
-
 static constexpr float IMU_SAMPLE_FREQUENCY = 500;
 static constexpr float MAHONY_KP = 0.5f;
 static constexpr float MAHONY_KI = 0;
@@ -56,6 +54,7 @@ int main()
 
     Board::initialize();
     initializeIo(drivers);
+    modm::delay_us(1000);
     robot.initSubsystemCommands();
 
     while (1)
@@ -85,6 +84,7 @@ static void initializeIo(Drivers *drivers)
     drivers->errorController.init();
     drivers->remote.initialize();
     drivers->bmi088.initialize(IMU_SAMPLE_FREQUENCY, MAHONY_KP, MAHONY_KI);
+    drivers->bmi088.requestRecalibration();
     drivers->refSerial.initialize();
     drivers->terminalSerial.initialize();
     drivers->schedulerTerminalHandler.init();
@@ -96,5 +96,5 @@ static void updateIo(Drivers *drivers)
     drivers->canRxHandler.pollCanData();
     drivers->refSerial.updateSerial();
     drivers->remote.read();
-    drivers->bmi088.getImuState();
+    drivers->bmi088.periodicIMUUpdate();
 }
