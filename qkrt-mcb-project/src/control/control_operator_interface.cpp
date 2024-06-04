@@ -42,7 +42,7 @@ struct ControlState {
     float normFactor = 1.0;
     float pitch = 0.0;
     float yaw = 0.0;
-    float moveSpeed = 0.5f;
+    float moveSpeed = 0.3f;
     float pitchSensitivity = 0.0075f;
     float yawSensitivity = 0.0075f;
     bool flywheel = false;

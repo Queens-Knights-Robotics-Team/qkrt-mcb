@@ -102,6 +102,11 @@ private:
     float MAX_RPM = 300.0f;
     float MAX_MV = 25000.0f;
     
+    float rpmToMilliVolts(float rpm)
+    {
+        return rpm * MAX_MV / MAX_RPM;
+    }
+    
     float getYawEnc(float angle);
 
     /// Desired wheel output for each motor

@@ -21,8 +21,6 @@
 
 #include "tap/algorithms/math_user_utils.hpp"
 
-#include "tap/communication/sensors/imu/bmi088/bmi088.hpp"
-
 #include "drivers.hpp"
 
 #include "../internal.hpp"
@@ -76,6 +74,9 @@ void TurretSubsystem::initialize()
 // setVelocityGimbal function
 void TurretSubsystem::adjustPositionGimbal(float pitchInput, float yawInput)
 {
+    pitchInput = limitVal(rpmToMilliVolts(pitchInput), -MAX_MV, MAX_MV);
+    yawInput   = limitVal(rpmToMilliVolts(yawInput), -MAX_MV, MAX_MV);
+
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitchInput;
     desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yawInput;
 }
@@ -84,7 +85,12 @@ void TurretSubsystem::refresh()
 {
     auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
         pid.update(desiredOutput - motor.getShaftRPM());
-        motor.setDesiredOutput(pid.getValue());
+
+        // removes overshoot and drift
+        if(pid.getValue() < 300 && pid.getValue() > -300)
+            motor.setDesiredOutput(0);
+        else
+            motor.setDesiredOutput(pid.getValue());
     };
 
     for (size_t ii = 0; ii < motors.size(); ii++)
