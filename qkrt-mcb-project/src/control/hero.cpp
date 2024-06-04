@@ -18,6 +18,7 @@
  */
 
 #if defined(TARGET_HERO)
+
 #include "hero.hpp"
 #include "drivers_singleton.hpp"
 
@@ -64,7 +65,7 @@ Robot::Robot(Drivers &drivers)
                 .pitchId = MotorId::MOTOR6,
                 .yawId = MotorId::MOTOR8,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(15000,0,30000,700000,10000000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(50,1,0,500000,1000000),
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
@@ -133,4 +134,5 @@ void Robot::registerSoldierIoMappings()
 }
   
 }  // namespace control
+
 #endif
