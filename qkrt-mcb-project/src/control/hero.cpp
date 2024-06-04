@@ -64,7 +64,7 @@ Robot::Robot(Drivers &drivers)
                 .pitchId = MotorId::MOTOR6,
                 .yawId = MotorId::MOTOR8,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(30000,0,9000,500000,1000000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(15000,0,30000,700000,10000000),
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
