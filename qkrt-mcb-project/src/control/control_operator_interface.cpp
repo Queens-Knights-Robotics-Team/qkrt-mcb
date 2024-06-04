@@ -42,7 +42,7 @@ struct ControlState {
     float normFactor = 1.0;
     float pitch = 0.0;
     float yaw = 0.0;
-    float moveSpeed = 0.3f;
+    float moveSpeed = 0.5f;
     float pitchSensitivity = 0.0075f;
     float yawSensitivity = 0.0075f;
     bool flywheel = false;
@@ -80,7 +80,7 @@ void ControlOperatorInterface::pollInputDevices() {
             rawX = remote.getChannel(Remote::Channel::LEFT_HORIZONTAL);
             rawY = remote.getChannel(Remote::Channel::LEFT_VERTICAL);
             control_s.pitch = remote.getChannel(Remote::Channel::RIGHT_VERTICAL);
-            control_s.yaw   = remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL) + imu.getGz()/240;
+            control_s.yaw   = remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL);
             control_s.flywheel = remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::UP;
             control_s.agitator = remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP;
             wheelInput = remote.getWheel();
@@ -93,7 +93,7 @@ void ControlOperatorInterface::pollInputDevices() {
             rawX = remote.keyPressed(Remote::Key::D) * control_s.moveSpeed + remote.keyPressed(Remote::Key::A) * -control_s.moveSpeed;
             rawY = remote.keyPressed(Remote::Key::W) * control_s.moveSpeed + remote.keyPressed(Remote::Key::S) * -control_s.moveSpeed;
             control_s.pitch = -static_cast<float>(remote.getMouseY()) * control_s.pitchSensitivity;
-            control_s.yaw   =  static_cast<float>(remote.getMouseX()) * control_s.yawSensitivity + imu.getGz()/240;
+            control_s.yaw   =  static_cast<float>(remote.getMouseX()) * control_s.yawSensitivity;
             control_s.flywheel = remote.getMouseR();
             control_s.agitator = remote.getMouseL();
             control_s.beyblade =
@@ -108,7 +108,7 @@ void ControlOperatorInterface::pollInputDevices() {
 
     control_s.x = std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY;
     control_s.y = std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY;
-    control_s.w = control_s.beyblade ? 0.2f : 0.0f;
+    control_s.w = control_s.beyblade ? 0.4f : 0.0f;
     control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), 1.0f);
 }
 

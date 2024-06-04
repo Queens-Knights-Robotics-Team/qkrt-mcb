@@ -19,9 +19,6 @@
 
 #pragma once
 
-#ifndef FLYWHEEL_SUBSYSTEM_HPP_
-#define FLYWHEEL_SUBSYSTEM_HPP_
-
 #include "tap/control/subsystem.hpp"
 #include "tap/util_macros.hpp"
 
@@ -39,7 +36,7 @@ class FlywheelSubsystem : public tap::control::Subsystem
 public:
     FlywheelSubsystem(Drivers& drivers);
         
-    // ~FlywheelSubsystem() = default;
+    ~FlywheelSubsystem() = default;
 
     void initialize() override;
 
@@ -57,5 +54,3 @@ private:
 
 }  
 }  
-
-#endif

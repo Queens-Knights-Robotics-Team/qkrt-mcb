@@ -20,8 +20,8 @@
 
 #if defined(TARGET_STANDARD)
 #include "standard.hpp"
-#include "standard.cpp"
-// #elif defined(TARGET_HERO)
-// #include "hero.hpp"
-// #include "hero.cpp"
+#elif defined(TARGET_HERO)
+#include "hero.hpp"
+#else
+#error "robot type not supported"
 #endif

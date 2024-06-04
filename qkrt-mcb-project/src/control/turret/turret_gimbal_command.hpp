@@ -39,9 +39,7 @@ class TurretGimbalCommand : public tap::control::Command
 {
 public:
     static constexpr float MAX_TURRET_SPEED_MPS = 1.0f;
-    static constexpr float TURRET_GEAR_RATIO = 2.0f;
-
-
+    
     /**
      * @brief Construct a new Turret Gimbal Command object
      *
@@ -60,10 +58,7 @@ public:
     bool isFinished() const { return false; }
 
 private:
-    float getAngle(float enc_val);
-
     TurretSubsystem& turret;
-
     ControlOperatorInterface& operatorInterface;
 };
 

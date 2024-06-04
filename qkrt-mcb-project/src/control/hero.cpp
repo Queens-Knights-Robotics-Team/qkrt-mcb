@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
-#if defined(TARGET_HERO)
 
+#if defined(TARGET_HERO)
 #include "hero.hpp"
 #include "drivers_singleton.hpp"
 
@@ -64,7 +64,7 @@ Robot::Robot(Drivers &drivers)
                 .pitchId = MotorId::MOTOR6,
                 .yawId = MotorId::MOTOR8,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(50,1,0,500000,1000000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(30000,0,9000,500000,1000000),
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
@@ -133,5 +133,4 @@ void Robot::registerSoldierIoMappings()
 }
   
 }  // namespace control
-
 #endif

@@ -87,7 +87,7 @@ public:
     /// forward, negative is backwards.
     /// @param yaw Desired turret speed in m/s of the yaw of the Turret.
     ///
-    mockable void setVelocityGimbal(float pitch, float yaw);
+    mockable void adjustPositionGimbal(float pitchInput, float yawInput);
 
     ///
     /// @brief Runs velocity PID controllers for the drive motors.

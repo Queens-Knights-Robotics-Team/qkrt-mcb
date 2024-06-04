@@ -27,8 +27,6 @@
 
 #include "drivers_singleton.hpp"
 
-#include "control/robot.hpp"
-
 static constexpr float IMU_SAMPLE_FREQUENCY = 500;
 static constexpr float MAHONY_KP = 0.5f;
 static constexpr float MAHONY_KI = 0;

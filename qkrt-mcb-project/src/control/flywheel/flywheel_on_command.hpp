@@ -17,8 +17,7 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef FLYWHEEL_ON_COMMAND_HPP_
-#define FLYWHEEL_ON_COMMAND_HPP_
+#pragma once
 
 #include "tap/control/command.hpp"
 
@@ -60,5 +59,3 @@ private:
 };  // class FlywheelOnCommand
 }  // namespace flywheel
 }  // namespace control
-
-#endif  // FLYWHEEL_ON_COMMAND_HPP_

@@ -25,12 +25,9 @@
 
 #include "turret_subsystem.hpp"
 
-using tap::algorithms::limitVal;
+#include "../internal.hpp"
 
-float curr_pitch_input=0;
-static constexpr uint16_t ENC_RESOLUTION = 8192;
-float min_pitch=-25;
-float max_pitch=50;
+using tap::algorithms::limitVal;
 
 namespace control::turret
 {
@@ -44,33 +41,18 @@ TurretGimbalCommand::TurretGimbalCommand(
     addSubsystemRequirement(&turret);
 }
 
-
-float TurretGimbalCommand::getAngle(float enc_val)
-{
-    return 360 / static_cast<float>(ENC_RESOLUTION) * enc_val ;
-}
-
 void TurretGimbalCommand::execute()
 {
     auto scale = [](float raw) -> float {
-        return limitVal(raw, -1.0f, 1.0f) * MAX_TURRET_SPEED_MPS;
+        return limitVal(raw, -1.0f, 1.0f) * 0.004f;
     };
 
-    curr_pitch_input+=getAngle(operatorInterface.getTurretPitchInput()*10);
-
-    float lim_pitch_angle = limitVal(curr_pitch_input, min_pitch, max_pitch);
-    
-    if(lim_pitch_angle!=curr_pitch_input)
-    {
-        curr_pitch_input=lim_pitch_angle;
-    }
-
-    turret.setVelocityGimbal(
-        curr_pitch_input, 
-        operatorInterface.getTurretYawInput()
+    turret.adjustPositionGimbal(
+        scale(operatorInterface.getTurretPitchInput()),
+        scale(operatorInterface.getTurretYawInput())
     );
 }
 
-void TurretGimbalCommand::end(bool) { turret.setVelocityGimbal(.0f, .0f); }
+void TurretGimbalCommand::end(bool) { turret.adjustPositionGimbal(.0f, .0f); }
 
 };  // namespace control::turret
