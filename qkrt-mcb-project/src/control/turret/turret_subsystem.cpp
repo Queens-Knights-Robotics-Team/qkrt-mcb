@@ -21,6 +21,8 @@
 
 #include "tap/algorithms/math_user_utils.hpp"
 
+#include "tap/communication/sensors/imu/bmi088/bmi088.hpp"
+
 #include "drivers.hpp"
 
 #include "../internal.hpp"
@@ -54,8 +56,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
       },
       pidControllers{},
       motors{
-          Motor(&drivers, config.pitchId, config.canBus, true,  "PITCH"),
-          Motor(&drivers, config.yawId,   config.canBus, false, "YAW"),
+          Motor(&drivers, config.pitchId, config.canBus, config.pitchInverted,  "PITCH"),
+          Motor(&drivers, config.yawId,   config.canBus, config.yawInverted, "YAW"),
       }
 {
     pidControllers[PITCH_MOTOR].setParameter(config.turretPitchPidConfig);
@@ -74,31 +76,21 @@ void TurretSubsystem::initialize()
 // setVelocityGimbal function
 void TurretSubsystem::adjustPositionGimbal(float pitchInput, float yawInput)
 {
-    /* adjust and bound gimbal pitch value */
-    static constexpr float RAD_PITCH_MIN = ENC_TO_RAD(ENCODER_PITCH_MIN);
-    static constexpr float RAD_PITCH_MAX = ENC_TO_RAD(ENCODER_PITCH_MAX);
-    auto& desiredPitch = desiredOutput[PITCH_MOTOR];
-    desiredPitch -= pitchInput; // decrease desired pitch to tilt upwards
-    desiredPitch = desiredPitch < RAD_PITCH_MIN ? RAD_PITCH_MIN :
-                   desiredPitch > RAD_PITCH_MAX ? RAD_PITCH_MAX : desiredPitch;
-
-    /* adjust yaw value but do not bound */
-    desiredOutput[YAW_MOTOR] += yawInput;
+    desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitchInput;
+    desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yawInput;
 }
 
 void TurretSubsystem::refresh()
 {
-    // pitch position control
-    pidControllers[PITCH_MOTOR].update(
-        desiredOutput[PITCH_MOTOR] - ENC_TO_RAD(motors[PITCH_MOTOR].getEncoderUnwrapped())
-    );
-    motors[PITCH_MOTOR].setDesiredOutput(pidControllers[PITCH_MOTOR].getValue());
+    auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
+        pid.update(desiredOutput - motor.getShaftRPM());
+        motor.setDesiredOutput(pid.getValue());
+    };
 
-    // yaw velocity control
-    pidControllers[YAW_MOTOR].update(
-        desiredOutput[YAW_MOTOR] - ENC_TO_RAD(motors[YAW_MOTOR].getEncoderUnwrapped())
-    );
-    motors[YAW_MOTOR].setDesiredOutput(pidControllers[YAW_MOTOR].getValue());
+    for (size_t ii = 0; ii < motors.size(); ii++)
+    {
+        runPid(pidControllers[ii], motors[ii], desiredOutput[ii]);
+    }
     
     float rawYawAngle = static_cast<float>(
         motors[YAW_MOTOR].getEncoderUnwrapped()) * YAW_GEAR_RATIO_INV - ENCODER_YAW_OFFSET;

@@ -38,9 +38,9 @@ void FlywheelOnCommand::execute()
     operatorInterface.pollInputDevices();
 
     if (operatorInterface.getFlyWheelInput())
-        flywheel->setDesiredOutput(0.35f);
+        flywheel->setDesiredOutput(spinning_pwm);
     else 
-        flywheel->setDesiredOutput(0.25f); 
+        flywheel->setDesiredOutput(OFF_PWM); 
 }
 
 void FlywheelOnCommand::end(bool) { flywheel->setDesiredOutput(0.25f); }

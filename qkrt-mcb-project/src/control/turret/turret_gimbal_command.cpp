@@ -44,7 +44,7 @@ TurretGimbalCommand::TurretGimbalCommand(
 void TurretGimbalCommand::execute()
 {
     auto scale = [](float raw) -> float {
-        return limitVal(raw, -1.0f, 1.0f) * 0.004f;
+        return limitVal(raw, -1.0f, 1.0f);
     };
 
     turret.adjustPositionGimbal(

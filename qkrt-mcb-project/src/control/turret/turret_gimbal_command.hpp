@@ -37,9 +37,7 @@ class TurretSubsystem;
  */
 class TurretGimbalCommand : public tap::control::Command
 {
-public:
-    static constexpr float MAX_TURRET_SPEED_MPS = 1.0f;
-    
+public:    
     /**
      * @brief Construct a new Turret Gimbal Command object
      *

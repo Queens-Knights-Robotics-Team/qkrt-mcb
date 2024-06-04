@@ -17,9 +17,9 @@
  * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#if defined(TARGET_HERO)
+#if defined(TARGET_STANDARD)
 
-#include "hero.hpp"
+#include "standard.hpp"
 #include "drivers_singleton.hpp"
 
 #include "tap/util_macros.hpp"
@@ -63,11 +63,11 @@ Robot::Robot(Drivers &drivers)
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
           turret(drivers, turret::TurretConfig {
                 .pitchId = MotorId::MOTOR6,
-                .pitchInverted = true,
+                .pitchInverted = false,
                 .yawId = MotorId::MOTOR5,
-                .yawInverted = false,
+                .yawInverted = true,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(50,1,0,500000,1000000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(100,1.2,1,500000,1000000),
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
             }),
           turretGimbal(turret, drivers.controlOperatorInterface),
@@ -90,7 +90,7 @@ Robot::Robot(Drivers &drivers)
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.35f)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.4f)
 {
 }
 

@@ -42,7 +42,9 @@ namespace control::turret
 struct TurretConfig
 {
     tap::motor::MotorId pitchId;
+    bool pitchInverted;
     tap::motor::MotorId yawId;
+    bool yawInverted;
     tap::can::CanBus canBus;
     modm::Pid<float>::Parameter turretYawPidConfig;
     modm::Pid<float>::Parameter turretPitchPidConfig;
@@ -102,11 +104,6 @@ private:
     
     float getYawEnc(float angle);
 
-
-    float rpmToMilliVolts(float rpm)
-    {
-        return rpm * MAX_MV / MAX_RPM;
-    }
     /// Desired wheel output for each motor
     std::array<float, static_cast<uint8_t>(MotorId::NUM_MOTORS)> desiredOutput;
 
