@@ -63,7 +63,8 @@ Robot::Robot(Drivers &drivers)
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
           turret(drivers, turret::TurretConfig {
                 .pitchId = MotorId::MOTOR6,
-                .yawId = MotorId::MOTOR8,
+                // Hero is 8 || Standard is 5
+                .yawId = MotorId::MOTOR5,
                 .canBus = CanBus::CAN_BUS1,
                 .turretYawPidConfig = modm::Pid<float>::Parameter(50,1,0,500000,1000000),
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
