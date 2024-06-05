@@ -34,8 +34,6 @@ static const auto PITCH_MOTOR = static_cast<uint8_t>(TurretSubsystem::MotorId::P
 static const auto YAW_MOTOR   = static_cast<uint8_t>(TurretSubsystem::MotorId::YAW);
 
 static constexpr float ENCODER_RESOLUTION = static_cast<float>(2 << 12);
-static constexpr float YAW_GEAR_RATIO     = 2.0f;
-static constexpr float YAW_GEAR_RATIO_INV = 1.0f / YAW_GEAR_RATIO;
 static constexpr uint16_t ENCODER_YAW_OFFSET   = 0x0430;
 static constexpr uint16_t ENCODER_PITCH_OFFSET = 0x02A7;
 static constexpr uint16_t ENCODER_PITCH_MIN = 0x0100;
@@ -56,7 +54,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
       motors{
           Motor(&drivers, config.pitchId, config.canBus, config.pitchInverted,  "PITCH"),
           Motor(&drivers, config.yawId,   config.canBus, config.yawInverted, "YAW"),
-      }
+      },
+      yawGearRatio(config.yawGearRatio)
 {
     pidControllers[PITCH_MOTOR].setParameter(config.turretPitchPidConfig);
     pidControllers[YAW_MOTOR].setParameter(config.turretYawPidConfig);
@@ -99,7 +98,7 @@ void TurretSubsystem::refresh()
     }
     
     float rawYawAngle = static_cast<float>(
-        motors[YAW_MOTOR].getEncoderUnwrapped()) * YAW_GEAR_RATIO_INV - ENCODER_YAW_OFFSET;
+        motors[YAW_MOTOR].getEncoderUnwrapped()) / yawGearRatio - ENCODER_YAW_OFFSET;
     internal::turretYaw = rawYawAngle / ENCODER_RESOLUTION * M_TWOPI;
 }
 }  // namespace control::turret
