@@ -37,14 +37,20 @@
 
 class Drivers;
 
+namespace tap::communication
+{
+namespace sensors::imu::bmi088 { class Bmi088; }
+}
+
 namespace control::turret
 {
 struct TurretConfig
 {
     tap::motor::MotorId pitchId;
-    bool pitchInverted;
     tap::motor::MotorId yawId;
-    bool yawInverted;
+    bool pitchMotorInverted;
+    bool yawMotorInverted;
+    bool imuInverted;
     float yawGearRatio;
     tap::can::CanBus canBus;
     modm::Pid<float>::Parameter turretYawPidConfig;
@@ -108,8 +114,6 @@ private:
         return rpm * MAX_MV / MAX_RPM;
     }
     
-    float getYawEnc(float angle);
-
     /// Desired wheel output for each motor
     std::array<float, static_cast<uint8_t>(MotorId::NUM_MOTORS)> desiredOutput;
 
@@ -117,8 +121,11 @@ private:
     std::array<Pid, static_cast<uint8_t>(MotorId::NUM_MOTORS)> pidControllers;
 
 protected:
+    tap::communication::sensors::imu::bmi088::Bmi088& imu;
+
     /// Motors.
     std::array<Motor, static_cast<uint8_t>(MotorId::NUM_MOTORS)> motors;
     float yawGearRatio;
+    bool imuInverted;
 };  // class TurretSubsystem
 }  // namespace control::turret

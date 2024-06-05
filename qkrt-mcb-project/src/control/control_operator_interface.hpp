@@ -24,7 +24,6 @@
 namespace tap::communication
 {
 namespace serial { class Remote; }
-namespace sensors::imu::bmi088 { class Bmi088; }
 }
 
 namespace control
@@ -32,8 +31,7 @@ namespace control
 class ControlOperatorInterface
 {
 public:
-    ControlOperatorInterface(tap::communication::serial::Remote& remote,
-                             tap::communication::sensors::imu::bmi088::Bmi088& imu);
+    ControlOperatorInterface(tap::communication::serial::Remote& remote);
 
     void pollInputDevices();
 
@@ -54,6 +52,5 @@ private:
     } activeDevice;
 
     tap::communication::serial::Remote& remote;
-    tap::communication::sensors::imu::bmi088::Bmi088& imu;
 };
 }  // namespace control

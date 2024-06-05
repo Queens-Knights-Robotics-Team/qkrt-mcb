@@ -63,9 +63,10 @@ Robot::Robot(Drivers &drivers)
           chassisOmniDrive(chassis, drivers.controlOperatorInterface),
           turret(drivers, turret::TurretConfig {
                 .pitchId = MotorId::MOTOR6,
-                .pitchInverted = false,
                 .yawId = MotorId::MOTOR5,
-                .yawInverted = true,
+                .pitchMotorInverted = false,
+                .yawMotorInverted = true,
+                .imuInverted = true,
                 .yawGearRatio = 1.0f,
                 .canBus = CanBus::CAN_BUS1,
                 .turretYawPidConfig = modm::Pid<float>::Parameter(100,3,0,200,1000000),

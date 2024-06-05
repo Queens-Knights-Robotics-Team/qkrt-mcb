@@ -51,11 +51,13 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
         ENC_TO_RAD(ENCODER_YAW_OFFSET)
       },
       pidControllers{},
+      imu(drivers.bmi088),
       motors{
-          Motor(&drivers, config.pitchId, config.canBus, config.pitchInverted,  "PITCH"),
-          Motor(&drivers, config.yawId,   config.canBus, config.yawInverted, "YAW"),
+          Motor(&drivers, config.pitchId, config.canBus, config.pitchMotorInverted, "PITCH"),
+          Motor(&drivers, config.yawId,   config.canBus, config.yawMotorInverted,   "YAW"),
       },
-      yawGearRatio(config.yawGearRatio)
+      yawGearRatio(config.yawGearRatio),
+      imuInverted(config.imuInverted)
 {
     pidControllers[PITCH_MOTOR].setParameter(config.turretPitchPidConfig);
     pidControllers[YAW_MOTOR].setParameter(config.turretYawPidConfig);
@@ -73,8 +75,12 @@ void TurretSubsystem::initialize()
 // setVelocityGimbal function
 void TurretSubsystem::adjustPositionGimbal(float pitchInput, float yawInput)
 {
+    static constexpr float imuRotationFactor = 1 / 295.0f;
+    float imuCounterRotation = rpmToMilliVolts(imu.getGz()) * yawGearRatio * imuRotationFactor;
+    if (imuInverted) imuCounterRotation = -imuCounterRotation;
+    
     pitchInput = limitVal(rpmToMilliVolts(pitchInput), -MAX_MV, MAX_MV);
-    yawInput   = limitVal(rpmToMilliVolts(yawInput), -MAX_MV, MAX_MV);
+    yawInput   = limitVal(rpmToMilliVolts(yawInput), -MAX_MV, MAX_MV) + imuCounterRotation;
 
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitchInput;
     desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yawInput;
