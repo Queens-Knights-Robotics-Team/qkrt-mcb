@@ -64,9 +64,9 @@ Robot::Robot(Drivers &drivers)
           turret(drivers, turret::TurretConfig {
                 .pitchId = MotorId::MOTOR6,
                 .yawId = MotorId::MOTOR8,
-                .pitchInverted = true,
-                .yawMotorInverted = false;
-                .imuMotorInverted = false;
+                .pitchMotorInverted = true,
+                .yawMotorInverted = false,
+                .imuInverted = false,
                 .yawGearRatio = 2.0f,
                 .canBus = CanBus::CAN_BUS1,
                 .turretYawPidConfig = modm::Pid<float>::Parameter(100,3,0,200,1000000),
@@ -75,7 +75,7 @@ Robot::Robot(Drivers &drivers)
           turretGimbal(turret, drivers.controlOperatorInterface),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
           eduPidConfig{
-              .kp = 1000,
+              .kp = 1900,
               .ki = 0,
               .kd = 0,
               .maxICumulative = 0,
