@@ -57,7 +57,9 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
           Motor(&drivers, config.yawId,   config.canBus, config.yawMotorInverted,   "YAW"),
       },
       yawGearRatio(config.yawGearRatio),
-      imuInverted(config.imuInverted)
+      imuInverted(config.imuInverted),
+      imuRotationFactor(config.imuRotationFactor),
+      encoderYawOffset(config.encoderYawOffset)
 {
     pidControllers[PITCH_MOTOR].setParameter(config.turretPitchPidConfig);
     pidControllers[YAW_MOTOR].setParameter(config.turretYawPidConfig);
@@ -75,8 +77,7 @@ void TurretSubsystem::initialize()
 // setVelocityGimbal function
 void TurretSubsystem::adjustPositionGimbal(float pitchInput, float yawInput)
 {
-    static constexpr float imuRotationFactor = 1 / 295.0f;
-    float imuCounterRotation = rpmToMilliVolts(imu.getGz()) * yawGearRatio * imuRotationFactor;
+    float imuCounterRotation = rpmToMilliVolts(imu.getGz()) * yawGearRatio / imuRotationFactor;
     if (imuInverted) imuCounterRotation = -imuCounterRotation;
     
     pitchInput = limitVal(rpmToMilliVolts(pitchInput), -MAX_MV, MAX_MV);
@@ -104,7 +105,7 @@ void TurretSubsystem::refresh()
     }
     
     float rawYawAngle = static_cast<float>(
-        motors[YAW_MOTOR].getEncoderUnwrapped()) / yawGearRatio - ENCODER_YAW_OFFSET;
+        motors[YAW_MOTOR].getEncoderUnwrapped()) / yawGearRatio - encoderYawOffset;
     internal::turretYaw = rawYawAngle / ENCODER_RESOLUTION * M_TWOPI;
 }
 }  // namespace control::turret

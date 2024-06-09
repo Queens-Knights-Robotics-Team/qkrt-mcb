@@ -31,9 +31,10 @@ namespace control::agitator
 {
 AgitatorCommand::AgitatorCommand(
     VelocityAgitatorSubsystem &agitator,
-    ControlOperatorInterface &operatorInterface)
+    ControlOperatorInterface &operatorInterface, float indexerSpeed)
     : agitator(agitator),
-      operatorInterface(operatorInterface)
+      operatorInterface(operatorInterface),
+      indexerSpeed(indexerSpeed)
 {
     addSubsystemRequirement(&agitator);
 }
@@ -43,7 +44,7 @@ void AgitatorCommand::execute()
     operatorInterface.pollInputDevices();
 
     if (operatorInterface.getAgitatorInput()) 
-        agitator.setSetpoint(8);
+        agitator.setSetpoint(indexerSpeed);
     else 
         agitator.setSetpoint(0);
 }

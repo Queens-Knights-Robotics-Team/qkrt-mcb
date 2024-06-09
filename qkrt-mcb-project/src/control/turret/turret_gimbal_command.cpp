@@ -34,9 +34,10 @@ namespace control::turret
 
 TurretGimbalCommand::TurretGimbalCommand(
     TurretSubsystem& turret,
-    ControlOperatorInterface& operatorInterface)
+    ControlOperatorInterface& operatorInterface, float yawSens)
     : turret(turret),
-      operatorInterface(operatorInterface)
+      operatorInterface(operatorInterface),
+      yawSens(yawSens)
 {
     addSubsystemRequirement(&turret);
 }
@@ -49,7 +50,7 @@ void TurretGimbalCommand::execute()
 
     turret.adjustPositionGimbal(
         scale(operatorInterface.getTurretPitchInput()),
-        scale(operatorInterface.getTurretYawInput())
+        scale(operatorInterface.getTurretYawInput()) * yawSens
     );
 }
 

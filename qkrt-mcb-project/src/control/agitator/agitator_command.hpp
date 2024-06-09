@@ -33,7 +33,7 @@ class VelocityAgitatorSubsystem;
 class AgitatorCommand : public tap::control::Command
 {
 public:
-    AgitatorCommand(VelocityAgitatorSubsystem &agitator, ControlOperatorInterface &operatorInterface);
+    AgitatorCommand(VelocityAgitatorSubsystem &agitator, ControlOperatorInterface &operatorInterface, float indexerSpeed);
 
     const char *getName() const override { return "Chassis omni drive"; }
 
@@ -49,6 +49,7 @@ private:
     VelocityAgitatorSubsystem &agitator;
 
     ControlOperatorInterface &operatorInterface;
+    float indexerSpeed;
 };
 
 }  // namespace control::chassis

@@ -52,6 +52,8 @@ struct TurretConfig
     bool yawMotorInverted;
     bool imuInverted;
     float yawGearRatio;
+    float imuRotationFactor;
+    uint16_t encoderYawOffset;
     tap::can::CanBus canBus;
     modm::Pid<float>::Parameter turretYawPidConfig;
     modm::Pid<float>::Parameter turretPitchPidConfig;
@@ -127,5 +129,8 @@ protected:
     std::array<Motor, static_cast<uint8_t>(MotorId::NUM_MOTORS)> motors;
     float yawGearRatio;
     bool imuInverted;
+    float imuRotationFactor;
+    uint16_t encoderYawOffset;
+
 };  // class TurretSubsystem
 }  // namespace control::turret

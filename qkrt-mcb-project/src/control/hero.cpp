@@ -68,17 +68,19 @@ Robot::Robot(Drivers &drivers)
                 .yawMotorInverted = false,
                 .imuInverted = false,
                 .yawGearRatio = 2.0f,
+                .imuRotationFactor = 390.0f,
+                .encoderYawOffset = 0x0430,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(100,3,0,200,1000000),
-                .turretPitchPidConfig = modm::Pid<float>::Parameter(200,3,0,50000,1000000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(370,3,0,200,1000000),
+                .turretPitchPidConfig = modm::Pid<float>::Parameter(200,3,0,5000,50000),
             }),
-          turretGimbal(turret, drivers.controlOperatorInterface),
+          turretGimbal(turret, drivers.controlOperatorInterface, 1.25),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
           eduPidConfig{
-              .kp = 1900,
-              .ki = 0,
+              .kp = 2100,
+              .ki = 1,
               .kd = 0,
-              .maxICumulative = 0,
+              .maxICumulative = 500,
               .maxOutput = 16000
           },
           moveIntegralConfig{
@@ -88,11 +90,11 @@ Robot::Robot(Drivers &drivers)
           },
           velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
           moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
-          agitatorCommand(velocityAgitatorSubsystem, drivers.controlOperatorInterface),
+          agitatorCommand(velocityAgitatorSubsystem, drivers.controlOperatorInterface, 4),
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.34f)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.355f)
 {
 }
 

@@ -108,7 +108,7 @@ void ControlOperatorInterface::pollInputDevices() {
 
     control_s.x = std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY;
     control_s.y = std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY;
-    control_s.w = control_s.beyblade ? 0.4f : 0.0f;
+    control_s.w = control_s.beyblade ? 0.6f : 0.0f;
     control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), 1.0f);
 }
 
