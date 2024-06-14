@@ -59,7 +59,8 @@ TurretSubsystem::TurretSubsystem(Drivers &drivers, const TurretConfig &config)
       yawGearRatio(config.yawGearRatio),
       imuInverted(config.imuInverted),
       imuRotationFactor(config.imuRotationFactor),
-      encoderYawOffset(config.encoderYawOffset)
+      encoderYawOffset(config.encoderYawOffset),
+      leway(config.leway)
 {
     pidControllers[PITCH_MOTOR].setParameter(config.turretPitchPidConfig);
     pidControllers[YAW_MOTOR].setParameter(config.turretYawPidConfig);
@@ -89,11 +90,11 @@ void TurretSubsystem::adjustPositionGimbal(float pitchInput, float yawInput)
 
 void TurretSubsystem::refresh()
 {
-    auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
+    auto runPid = [](Pid &pid, Motor &motor, float desiredOutput, int leway) {
         pid.update(desiredOutput - motor.getShaftRPM());
 
         // removes overshoot and drift
-        if(pid.getValue() < 300 && pid.getValue() > -300)
+        if(pid.getValue() < leway && pid.getValue() > -leway)
             motor.setDesiredOutput(0);
         else
             motor.setDesiredOutput(pid.getValue());
@@ -101,7 +102,7 @@ void TurretSubsystem::refresh()
 
     for (size_t ii = 0; ii < motors.size(); ii++)
     {
-        runPid(pidControllers[ii], motors[ii], desiredOutput[ii]);
+        runPid(pidControllers[ii], motors[ii], desiredOutput[ii], leway);
     }
     
     float rawYawAngle = static_cast<float>(

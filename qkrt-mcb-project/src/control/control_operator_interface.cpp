@@ -42,12 +42,15 @@ struct ControlState {
     float normFactor = 1.0;
     float pitch = 0.0;
     float yaw = 0.0;
-    float moveSpeed = 0.3f;
+    float moveSpeed = 0.4f;
     float pitchSensitivity = 0.0075f;
     float yawSensitivity = 0.0075f;
     bool flywheel = false;
     bool agitator = false;
-    bool beyblade = false;
+    float beyblade = 0.0;
+    float moveSpeedMultiplyer = 1;
+    int isInverse = false;
+
 };
 
 static ControlState control_s;
@@ -61,7 +64,7 @@ void ControlOperatorInterface::pollInputDevices() {
     /* toggle between controller and keyboard mode */
     static bool pressedLastInterval = false;
 
-    if (remote.keyPressed(Remote::Key::Q)) {
+    if (remote.keyPressed(Remote::Key::C)) {
         if (!pressedLastInterval) {
             activeDevice = (activeDevice == DeviceType::CONTROLLER) ?
                     DeviceType::KEYBOARDMOUSE : DeviceType::CONTROLLER;
@@ -70,6 +73,16 @@ void ControlOperatorInterface::pollInputDevices() {
         else return;
     }
     else pressedLastInterval = false;
+
+    static bool isInverseLast = false;
+    if (remote.keyPressed(Remote::Key::R)) {
+        if (!isInverseLast) {
+            control_s.isInverse = control_s.isInverse == true ? false : true;
+            isInverseLast = true;
+        }
+        else return;
+    }
+    else isInverseLast = false;
 
     /* poll for input using the chosen active device */
     static float rawX, rawY;
@@ -90,6 +103,7 @@ void ControlOperatorInterface::pollInputDevices() {
                 control_s.beyblade;
             break;
         case DeviceType::KEYBOARDMOUSE:
+            control_s.moveSpeedMultiplyer = remote.keyPressed(Remote::Key::SHIFT) ? 2 : 1;
             rawX = remote.keyPressed(Remote::Key::D) * control_s.moveSpeed + remote.keyPressed(Remote::Key::A) * -control_s.moveSpeed;
             rawY = remote.keyPressed(Remote::Key::W) * control_s.moveSpeed + remote.keyPressed(Remote::Key::S) * -control_s.moveSpeed;
             control_s.pitch = -static_cast<float>(remote.getMouseY()) * control_s.pitchSensitivity;
@@ -97,18 +111,20 @@ void ControlOperatorInterface::pollInputDevices() {
             control_s.flywheel = remote.getMouseR();
             control_s.agitator = remote.getMouseL();
             control_s.beyblade =
-                remote.keyPressed(Remote::Key::Z) ? true  :
-                remote.keyPressed(Remote::Key::X) ? false :
+                remote.keyPressed(Remote::Key::E) ? 0.6  :
+                remote.keyPressed(Remote::Key::Q) ? -0.6  :
+                remote.keyPressed(Remote::Key::F) ? 0 :
                 control_s.beyblade;
             break;
         default:
             rawX = rawY = 0.0;
             control_s.pitch = control_s.yaw = 0.0;
     }
-
-    control_s.x = std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY;
-    control_s.y = std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY;
-    control_s.w = control_s.beyblade ? 0.6f : 0.0f;
+    rawX = control_s.isInverse ? -rawX : rawX;
+    rawY = control_s.isInverse ? -rawY : rawY;
+    control_s.x = (std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY) * control_s.moveSpeedMultiplyer;
+    control_s.y = (std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY) * control_s.moveSpeedMultiplyer;
+    control_s.w = control_s.beyblade;
     control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), 1.0f);
 }
 

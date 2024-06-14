@@ -57,6 +57,7 @@ struct TurretConfig
     tap::can::CanBus canBus;
     modm::Pid<float>::Parameter turretYawPidConfig;
     modm::Pid<float>::Parameter turretPitchPidConfig;
+    int leway;
 };
 
 ///
@@ -131,6 +132,7 @@ protected:
     bool imuInverted;
     float imuRotationFactor;
     uint16_t encoderYawOffset;
+    int leway;
 
 };  // class TurretSubsystem
 }  // namespace control::turret
