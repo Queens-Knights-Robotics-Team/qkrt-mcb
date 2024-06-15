@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2020-2021 Queen's Knights Robotics Team
+ *
+ * This file is part of qkrt-mcb.
+ *
+ * qkrt-mcb is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * qkrt-mcb is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with qkrt-mcb.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "tap/control/hold_command_mapping.hpp"
+#include "tap/control/hold_repeat_command_mapping.hpp"
+#include "tap/control/setpoint/commands/move_integral_command.hpp"
+
+#include "control/chassis/chassis_subsystem.hpp"
+#include "control/chassis/chassis_omni_drive_command.hpp"
+
+#include "control/turret/turret_subsystem.hpp"
+#include "control/turret/turret_gimbal_command.hpp"
+
+#include "control/flywheel/flywheel_subsystem.hpp"
+#include "control/flywheel/flywheel_on_command.hpp"
+
+#include "control/agitator/velocity_agitator_subsystem.hpp"
+#include "control/agitator/agitator_command.hpp"
+
+
+class Drivers;
+
+namespace control
+{
+class Robot
+{
+public:
+    Robot(Drivers &drivers);
+
+    void initSubsystemCommands();
+
+private:
+    void initializeSubsystems();
+    void registerSoldierSubsystems();
+    void setDefaultSoldierCommands();
+    void startSoldierCommands();
+    void registerSoldierIoMappings();
+
+    Drivers &drivers;
+
+    chassis::ChassisSubsystem chassis;
+    chassis::ChassisOmniDriveCommand chassisOmniDrive;
+
+    turret::TurretSubsystem turret;
+    turret::TurretGimbalCommand turretGimbal;
+
+    flywheel::FlywheelSubsystem flywheels;
+    flywheel::FlywheelOnCommand flywheelsCommand;
+
+    tap::motor::DjiMotor agitator1;
+    tap::motor::DjiMotor agitator2;
+ 
+    algorithms::EduPidConfig eduPidConfig; 
+    tap::control::setpoint::MoveIntegralCommand::Config moveIntegralConfig;
+    agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem1;
+    agitator::AgitatorCommand agitatorCommand1;
+        agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem2;
+    agitator::AgitatorCommand agitatorCommand2;
+    
+    tap::control::setpoint::MoveIntegralCommand moveIntegralCommand1;
+    tap::control::setpoint::MoveIntegralCommand moveIntegralCommand2;
+    // tap::control::HoldRepeatCommandMapping rightSwitchUp;
+    // tap::control::HoldCommandMapping HCM;
+
+    // tap::control::HoldRepeatCommandMapping leftSwitchUp;
+};
+  
+}  // namespace control
