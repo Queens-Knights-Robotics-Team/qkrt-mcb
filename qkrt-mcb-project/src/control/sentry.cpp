@@ -19,7 +19,7 @@
 
 #if defined(TARGET_SENTRY)
 
-#include "sentry.hpp"
+#include "standard.hpp"
 #include "drivers_singleton.hpp"
 
 #include "tap/util_macros.hpp"
@@ -68,16 +68,15 @@ Robot::Robot(Drivers &drivers)
                 .yawMotorInverted = true,
                 .imuInverted = true,
                 .yawGearRatio = 1.0f,
-                .imuRotationFactor = 433.0f,
+                .imuRotationFactor = 444.0f,
                 .encoderYawOffset = 0x2B2,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(550,3,0,80,100000), 
-                .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(500,3,0,70,100000), 
+                .turretPitchPidConfig = modm::Pid<float>::Parameter(0,0.0,0,0,0),
                 .leway = 300
             }),
-          turretGimbal(turret, drivers.controlOperatorInterface, 0.3),
-          agitator1(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, false, "e1"),
-          agitator2(&drivers, MotorId::MOTOR8, CanBus::CAN_BUS1, true, "e2"),
+          turretGimbal(turret, drivers.controlOperatorInterface, 0.3, 0.3),
+          agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
           eduPidConfig{
               .kp = 1000,
               .ki = 0,
@@ -90,16 +89,13 @@ Robot::Robot(Drivers &drivers)
               .desiredSetpoint = M_TWOPI,
               .integralSetpointTolerance = 0
           },
-          velocityAgitatorSubsystem1(drivers, eduPidConfig, agitator1), // FIX LATER
-          moveIntegralCommand1(velocityAgitatorSubsystem1, moveIntegralConfig),
-          agitatorCommand1(velocityAgitatorSubsystem1, drivers.controlOperatorInterface, 48),
-          velocityAgitatorSubsystem2(drivers, eduPidConfig, agitator2), // FIX LATER
-          moveIntegralCommand2(velocityAgitatorSubsystem2, moveIntegralConfig),
-          agitatorCommand2(velocityAgitatorSubsystem2, drivers.controlOperatorInterface, 48),
+          velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
+          moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
+          agitatorCommand(velocityAgitatorSubsystem, drivers.controlOperatorInterface, 38),
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.47f)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.39f)
 {
 }
 
@@ -116,8 +112,7 @@ void Robot::initializeSubsystems()
 {
     chassis.initialize();
     turret.initialize();
-    velocityAgitatorSubsystem1.initialize();
-    velocityAgitatorSubsystem2.initialize();
+    velocityAgitatorSubsystem.initialize();
     flywheels.initialize();
 }
 
@@ -125,8 +120,7 @@ void Robot::registerSoldierSubsystems()
 {
     drivers.commandScheduler.registerSubsystem(&chassis);
     drivers.commandScheduler.registerSubsystem(&turret);
-    drivers.commandScheduler.registerSubsystem(&velocityAgitatorSubsystem1);
-    drivers.commandScheduler.registerSubsystem(&velocityAgitatorSubsystem2);
+    drivers.commandScheduler.registerSubsystem(&velocityAgitatorSubsystem);
     drivers.commandScheduler.registerSubsystem(&flywheels);
 }
 
@@ -135,8 +129,7 @@ void Robot::setDefaultSoldierCommands()
    chassis.setDefaultCommand(&chassisOmniDrive);
    turret.setDefaultCommand(&turretGimbal);
    flywheels.setDefaultCommand(&flywheelsCommand);
-   velocityAgitatorSubsystem1.setDefaultCommand(&agitatorCommand1);
-   velocityAgitatorSubsystem2.setDefaultCommand(&agitatorCommand2);
+   velocityAgitatorSubsystem.setDefaultCommand(&agitatorCommand);
 }
 
 void Robot::startSoldierCommands() {}

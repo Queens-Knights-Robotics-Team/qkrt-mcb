@@ -63,18 +63,14 @@ private:
     flywheel::FlywheelSubsystem flywheels;
     flywheel::FlywheelOnCommand flywheelsCommand;
 
-    tap::motor::DjiMotor agitator1;
-    tap::motor::DjiMotor agitator2;
+    tap::motor::DjiMotor agitator;
  
     algorithms::EduPidConfig eduPidConfig; 
     tap::control::setpoint::MoveIntegralCommand::Config moveIntegralConfig;
-    agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem1;
-    agitator::AgitatorCommand agitatorCommand1;
-        agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem2;
-    agitator::AgitatorCommand agitatorCommand2;
+    agitator::VelocityAgitatorSubsystem velocityAgitatorSubsystem;
+    agitator::AgitatorCommand agitatorCommand;
     
-    tap::control::setpoint::MoveIntegralCommand moveIntegralCommand1;
-    tap::control::setpoint::MoveIntegralCommand moveIntegralCommand2;
+    tap::control::setpoint::MoveIntegralCommand moveIntegralCommand;
     // tap::control::HoldRepeatCommandMapping rightSwitchUp;
     // tap::control::HoldCommandMapping HCM;
 

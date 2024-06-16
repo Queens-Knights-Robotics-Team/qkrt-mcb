@@ -25,6 +25,8 @@
 
 #include "velocity_agitator_subsystem.hpp"
 
+#include "../internal.hpp"
+
 using tap::algorithms::limitVal;
 
 namespace control::agitator
@@ -43,8 +45,10 @@ void AgitatorCommand::execute()
 {
     operatorInterface.pollInputDevices();
 
+    float newIndexerSpeed = internal::indexerBoost ? indexerSpeed : indexerSpeed + 10.0f;
+
     if (operatorInterface.getAgitatorInput()) 
-        agitator.setSetpoint(indexerSpeed);
+        agitator.setSetpoint(newIndexerSpeed);
     else 
         agitator.setSetpoint(0);
 }

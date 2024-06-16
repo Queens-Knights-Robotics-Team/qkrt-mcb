@@ -72,6 +72,7 @@ Robot::Robot(Drivers &drivers)
                 .encoderYawOffset = 0x0430,
                 .canBus = CanBus::CAN_BUS1,
                 .turretYawPidConfig = modm::Pid<float>::Parameter(300,3,0,100,10000),
+                // .turretYawPidConfig = modm::Pid<float>::Parameter(50,3,0,100,10000),
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(200,3,0,5000,50000),
                 .leway = 1000
             }),
@@ -95,7 +96,7 @@ Robot::Robot(Drivers &drivers)
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.34f)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.35f)
 {
 }
 

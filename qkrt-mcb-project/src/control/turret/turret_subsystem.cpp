@@ -78,11 +78,15 @@ void TurretSubsystem::initialize()
 // setVelocityGimbal function
 void TurretSubsystem::adjustPositionGimbal(float pitchInput, float yawInput)
 {
+#if defined(TARGET_SENTRY)
+    yawInput   = limitVal(rpmToMilliVolts(yawInput), -MAX_MV, MAX_MV);
+#else
     float imuCounterRotation = rpmToMilliVolts(imu.getGz()) * yawGearRatio / imuRotationFactor;
     if (imuInverted) imuCounterRotation = -imuCounterRotation;
+    yawInput   = limitVal(rpmToMilliVolts(yawInput), -MAX_MV, MAX_MV) + imuCounterRotation;
+#endif
     
     pitchInput = limitVal(rpmToMilliVolts(pitchInput), -MAX_MV, MAX_MV);
-    yawInput   = limitVal(rpmToMilliVolts(yawInput), -MAX_MV, MAX_MV) + imuCounterRotation;
 
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitchInput;
     desiredOutput[static_cast<uint8_t>(MotorId::YAW)]   = yawInput;

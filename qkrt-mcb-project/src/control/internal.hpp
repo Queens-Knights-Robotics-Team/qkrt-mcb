@@ -25,6 +25,7 @@ struct internal {
 
 static inline float turretYaw = 0.0f;
 static inline float turretPitch = 0.0f;
+static inline bool  indexerBoost = false;
 
 };
 

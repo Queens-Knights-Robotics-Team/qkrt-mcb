@@ -41,23 +41,24 @@ using tap::communication::sensors::imu::bmi088::Bmi088;
 namespace control
 {
 
-#define WHEEL_DEADZONE      100.0f
+#define WHEEL_DEADZONE  100.0f
 
 struct ControlState {
+    // basic movement inputs
     float x = 0.0;
     float y = 0.0;
-    float w = 0.0;
-    float normFactor = 1.0;
-    float pitch = 0.0;
-    float yaw = 0.0;
-    float moveSpeed = 0.4f;
-    float pitchSensitivity = 0.0075f;
-    float yawSensitivity = 0.0075f;
-    bool flywheel = false;
-    bool agitator = false;
+    float moveSpeed = 1.0f;
     float beyblade = 0.0;
-    float moveSpeedMultiplyer = 1;
-    int isInverse = false;
+    float normFactor = 1.0;
+    bool  invertMovement = false;
+    // turret movement inputs
+    float pitch = 0.0;
+    float pitchSensitivity = 0.0075f;
+    float yaw = 0.0;
+    float yawSensitivity = 0.0075f;
+    // turret head functionality
+    bool  flywheel = false;
+    bool  agitator = false;
 };
 
 static ControlState control_s;
@@ -68,41 +69,61 @@ ControlOperatorInterface::ControlOperatorInterface(Remote &remote)
 }
 
 void ControlOperatorInterface::pollInputDevices() {
-    /* toggle between controller and keyboard mode */
-    static bool pressedLastInterval = false;
+    static float rawX, rawY;
 
+    /* toggle between controller and keyboard mode */
+    static bool toggledDeviceLastInterval = false;
     if (remote.keyPressed(Remote::Key::C)) {
-        if (!pressedLastInterval) {
+        if (!toggledDeviceLastInterval) {
             activeDevice = (activeDevice == DeviceType::CONTROLLER) ?
                     DeviceType::KEYBOARDMOUSE : DeviceType::CONTROLLER;
-            pressedLastInterval = true;
+            toggledDeviceLastInterval = true;
         }
         else return;
     }
-    else pressedLastInterval = false;
+    else toggledDeviceLastInterval = false;
 
-    static bool isInverseLast = false;
-    if (remote.keyPressed(Remote::Key::R)) {
-        if (!isInverseLast) {
-            control_s.isInverse = !control_s.isInverse;
-            isInverseLast = true;
+#if defined(TARGET_STANDARD)
+    /* during the 1v1, the standard can boost the indexer speed to shoot
+       faster */
+    static bool toggledIndexerBoostInterval = false;
+    if (remote.keyPressed(Remote::Key::Z)) {
+        if (!toggledIndexerBoostInterval) {
+            internal::indexerBoost = !internal::indexerBoost; 
+            toggledIndexerBoostInterval = true;
         }
         else return;
     }
-    else isInverseLast = false;
-
-    /* poll for input using the chosen active device */
-    static float rawX, rawY;
-    static int16_t wheelInput;
-
-#if defined(TARGET_HERO)
-    static constexpr float BEYBLADE_SPEED = 0.6f;
-#elif defined(TARGET_STANDARD)
-    static constexpr float BEYBLADE_SPEED = 0.6f;
-#else
-    static constexpr float BEYBLADE_SPEED = 0.0f;
+    else toggledIndexerBoostInterval = false;
 #endif
 
+#if defined(TARGET_HERO)
+    /* in the event that the hero dies with the turret facing the wrong
+       way, you can invert the movement manually */
+    static bool toggledInvertedMovementLastInterval = false;
+    if (remote.keyPressed(Remote::Key::R)) {
+        if (!toggledInvertedMovementLastInterval) {
+            control_s.invertMovement = !control_s.invertMovement;
+            toggledInvertedMovementLastInterval = true;
+        }
+        else return;
+    }
+    else toggledInvertedMovementLastInterval = false;
+#endif
+
+#if defined(TARGET_SENTRY)
+    /* allow the sentry to switch to autonomous mode by flicking down the
+       left switch of the controller  */
+    if (remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::DOWN) {
+        control_s.beyblade =
+            remote.getWheel() >  WHEEL_DEADZONE ? 1.0f :
+            remote.getWheel() < -WHEEL_DEADZONE ? 0.0f :
+            control_s.beyblade;
+        rawX = rawY = 0.0;
+        control_s.pitch = control_s.yaw = 0.0;
+        control_s.flywheel = control_s.agitator = false;
+    } else
+#endif
     switch (activeDevice) {
         case DeviceType::CONTROLLER:
             rawX = remote.getChannel(Remote::Channel::LEFT_HORIZONTAL);
@@ -111,52 +132,56 @@ void ControlOperatorInterface::pollInputDevices() {
             control_s.yaw   = remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL);
             control_s.flywheel = remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::UP;
             control_s.agitator = remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP;
-            wheelInput = remote.getWheel();
+            // you can mess with these values for beyblade depending on available power
             control_s.beyblade =
-                wheelInput >  WHEEL_DEADZONE ? BEYBLADE_SPEED :
-                wheelInput < -WHEEL_DEADZONE ? 0 :
+                remote.getWheel() >  WHEEL_DEADZONE ? 0.45f :
+                remote.getWheel() < -WHEEL_DEADZONE ? 0.00f :
                 control_s.beyblade;
             break;
         case DeviceType::KEYBOARDMOUSE:
-            control_s.moveSpeedMultiplyer = remote.keyPressed(Remote::Key::SHIFT) ? 3 : 1;
-            rawX = remote.keyPressed(Remote::Key::D) * control_s.moveSpeed + remote.keyPressed(Remote::Key::A) * -control_s.moveSpeed;
-            rawY = remote.keyPressed(Remote::Key::W) * control_s.moveSpeed + remote.keyPressed(Remote::Key::S) * -control_s.moveSpeed;
+            // you can adjust the move speed after pressing shift
+            control_s.moveSpeed = remote.keyPressed(Remote::Key::SHIFT) ? 1.5 : 0.35;
+            rawX = (remote.keyPressed(Remote::Key::D) * control_s.moveSpeed) - (remote.keyPressed(Remote::Key::A) * control_s.moveSpeed);
+            rawY = (remote.keyPressed(Remote::Key::W) * control_s.moveSpeed) - (remote.keyPressed(Remote::Key::S) * control_s.moveSpeed);
             control_s.pitch = -static_cast<float>(remote.getMouseY()) * control_s.pitchSensitivity;
             control_s.yaw   =  static_cast<float>(remote.getMouseX()) * control_s.yawSensitivity;
             control_s.flywheel = remote.getMouseR();
             control_s.agitator = remote.getMouseL();
+            // you can mess with these values for beyblade depending on available power
             control_s.beyblade =
-                remote.keyPressed(Remote::Key::E) ?  BEYBLADE_SPEED :
-                remote.keyPressed(Remote::Key::Q) ? -BEYBLADE_SPEED :
-                remote.keyPressed(Remote::Key::F) ?  0 :
+                remote.keyPressed(Remote::Key::E) ?  0.45f :
+                remote.keyPressed(Remote::Key::Q) ? -1.00f :
+                remote.keyPressed(Remote::Key::F) ?  0.00f :
                 control_s.beyblade;
             break;
         default:
             rawX = rawY = 0.0;
             control_s.pitch = control_s.yaw = 0.0;
+            control_s.flywheel = control_s.agitator = false;
     }
-    rawX = control_s.isInverse ? -rawX : rawX;
-    rawY = control_s.isInverse ? -rawY : rawY;
-    control_s.x = (std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY) * control_s.moveSpeedMultiplyer;
-    control_s.y = (std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY) * control_s.moveSpeedMultiplyer;
-    control_s.w = control_s.beyblade;
-    control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), 1.0f);
+    
+    rawX = control_s.invertMovement ? -rawX : rawX;
+    rawY = control_s.invertMovement ? -rawY : rawY;
+
+    control_s.x = std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY;
+    control_s.y = std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY;
+    control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.beyblade), 1.0f);
 }
 
 float ControlOperatorInterface::getChassisOmniLeftFrontInput() {
-    return (control_s.y + control_s.x + control_s.w) / control_s.normFactor;
+    return (control_s.y + control_s.x + control_s.beyblade) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getChassisOmniLeftBackInput() {
-    return (control_s.y - control_s.x + control_s.w) / control_s.normFactor;
+    return (control_s.y - control_s.x + control_s.beyblade) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getChassisOmniRightFrontInput() {
-    return (control_s.y - control_s.x - control_s.w) / control_s.normFactor;
+    return (control_s.y - control_s.x - control_s.beyblade) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getChassisOmniRightBackInput() {
-    return (control_s.y + control_s.x - control_s.w) / control_s.normFactor;
+    return (control_s.y + control_s.x - control_s.beyblade) / control_s.normFactor;
 }
 
 float ControlOperatorInterface::getTurretPitchInput() {

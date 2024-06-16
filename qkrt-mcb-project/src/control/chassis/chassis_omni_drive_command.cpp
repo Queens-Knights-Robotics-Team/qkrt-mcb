@@ -47,10 +47,10 @@ void ChassisOmniDriveCommand::execute()
     };
 
     chassis.setVelocityOmniDrive(
-        scale(operatorInterface.getChassisOmniLeftFrontInput()),
-        scale(operatorInterface.getChassisOmniLeftBackInput()),
-        scale(operatorInterface.getChassisOmniRightFrontInput()),
-        scale(operatorInterface.getChassisOmniRightBackInput())
+        operatorInterface.getChassisOmniLeftFrontInput(),
+        operatorInterface.getChassisOmniLeftBackInput(),
+        operatorInterface.getChassisOmniRightFrontInput(),
+        operatorInterface.getChassisOmniRightBackInput()
     );
 }
 
