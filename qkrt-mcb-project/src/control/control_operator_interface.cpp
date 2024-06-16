@@ -150,7 +150,7 @@ void ControlOperatorInterface::pollInputDevices() {
             // you can mess with these values for beyblade depending on available power
             control_s.beyblade =
                 remote.keyPressed(Remote::Key::E) ?  0.45f :
-                remote.keyPressed(Remote::Key::Q) ? -1.00f :
+                remote.keyPressed(Remote::Key::Q) ? -1.25f :
                 remote.keyPressed(Remote::Key::F) ?  0.00f :
                 control_s.beyblade;
             break;

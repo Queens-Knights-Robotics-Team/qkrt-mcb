@@ -45,7 +45,7 @@ void AgitatorCommand::execute()
 {
     operatorInterface.pollInputDevices();
 
-    float newIndexerSpeed = internal::indexerBoost ? indexerSpeed : indexerSpeed + 10.0f;
+    float newIndexerSpeed = internal::indexerBoost ? indexerSpeed  + 10.0f : indexerSpeed;
 
     if (operatorInterface.getAgitatorInput()) 
         agitator.setSetpoint(newIndexerSpeed);
