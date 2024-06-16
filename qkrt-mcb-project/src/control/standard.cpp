@@ -95,7 +95,7 @@ Robot::Robot(Drivers &drivers)
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.39f)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.345f)
 {
 }
 
