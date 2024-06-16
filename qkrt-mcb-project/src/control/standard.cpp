@@ -68,14 +68,14 @@ Robot::Robot(Drivers &drivers)
                 .yawMotorInverted = true,
                 .imuInverted = true,
                 .yawGearRatio = 1.0f,
-                .imuRotationFactor = 433.0f,
+                .imuRotationFactor = 444.0f,
                 .encoderYawOffset = 0x2B2,
                 .canBus = CanBus::CAN_BUS1,
-                .turretYawPidConfig = modm::Pid<float>::Parameter(550,3,0,80,100000), 
-                .turretPitchPidConfig = modm::Pid<float>::Parameter(100,3,0,50000,50000),
+                .turretYawPidConfig = modm::Pid<float>::Parameter(650,3,0,70,100000), 
+                .turretPitchPidConfig = modm::Pid<float>::Parameter(200,3.5,0,50000,50000),
                 .leway = 300
             }),
-          turretGimbal(turret, drivers.controlOperatorInterface, 0.3),
+          turretGimbal(turret, drivers.controlOperatorInterface, 0.3, 0.3),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
           eduPidConfig{
               .kp = 1000,
@@ -91,11 +91,11 @@ Robot::Robot(Drivers &drivers)
           },
           velocityAgitatorSubsystem(drivers, eduPidConfig, agitator), // FIX LATER
           moveIntegralCommand(velocityAgitatorSubsystem, moveIntegralConfig),
-          agitatorCommand(velocityAgitatorSubsystem, drivers.controlOperatorInterface, 30),
+          agitatorCommand(velocityAgitatorSubsystem, drivers.controlOperatorInterface, 48),
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.49f)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.36f)
 {
 }
 

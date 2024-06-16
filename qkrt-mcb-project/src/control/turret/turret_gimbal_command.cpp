@@ -34,10 +34,11 @@ namespace control::turret
 
 TurretGimbalCommand::TurretGimbalCommand(
     TurretSubsystem& turret,
-    ControlOperatorInterface& operatorInterface, float yawSens)
+    ControlOperatorInterface& operatorInterface, float yawSens, float pitchSens)
     : turret(turret),
       operatorInterface(operatorInterface),
-      yawSens(yawSens)
+      yawSens(yawSens),
+      pitchSens(pitchSens)
 {
     addSubsystemRequirement(&turret);
 }

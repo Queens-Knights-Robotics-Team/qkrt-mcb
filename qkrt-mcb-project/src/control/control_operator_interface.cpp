@@ -30,6 +30,14 @@ using tap::algorithms::limitVal;
 using tap::communication::serial::Remote;
 using tap::communication::sensors::imu::bmi088::Bmi088;
 
+/* TODO
+ *
+ * - manage power consumption
+ * - make code more readable & add comments if needed
+ * - allow user to toggle between 1v1 and 3v3 mode (infantry)
+ * - 
+ */
+
 namespace control
 {
 
@@ -50,7 +58,6 @@ struct ControlState {
     float beyblade = 0.0;
     float moveSpeedMultiplyer = 1;
     int isInverse = false;
-
 };
 
 static ControlState control_s;
@@ -77,7 +84,7 @@ void ControlOperatorInterface::pollInputDevices() {
     static bool isInverseLast = false;
     if (remote.keyPressed(Remote::Key::R)) {
         if (!isInverseLast) {
-            control_s.isInverse = control_s.isInverse == true ? false : true;
+            control_s.isInverse = !control_s.isInverse;
             isInverseLast = true;
         }
         else return;
@@ -87,6 +94,14 @@ void ControlOperatorInterface::pollInputDevices() {
     /* poll for input using the chosen active device */
     static float rawX, rawY;
     static int16_t wheelInput;
+
+#if defined(TARGET_HERO)
+    static constexpr float BEYBLADE_SPEED = 0.6f;
+#elif defined(TARGET_STANDARD)
+    static constexpr float BEYBLADE_SPEED = 0.6f;
+#else
+    static constexpr float BEYBLADE_SPEED = 0.0f;
+#endif
 
     switch (activeDevice) {
         case DeviceType::CONTROLLER:
@@ -98,12 +113,12 @@ void ControlOperatorInterface::pollInputDevices() {
             control_s.agitator = remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP;
             wheelInput = remote.getWheel();
             control_s.beyblade =
-                wheelInput >  WHEEL_DEADZONE ? true  :
-                wheelInput < -WHEEL_DEADZONE ? false :
+                wheelInput >  WHEEL_DEADZONE ? BEYBLADE_SPEED :
+                wheelInput < -WHEEL_DEADZONE ? 0 :
                 control_s.beyblade;
             break;
         case DeviceType::KEYBOARDMOUSE:
-            control_s.moveSpeedMultiplyer = remote.keyPressed(Remote::Key::SHIFT) ? 2 : 1;
+            control_s.moveSpeedMultiplyer = remote.keyPressed(Remote::Key::SHIFT) ? 3 : 1;
             rawX = remote.keyPressed(Remote::Key::D) * control_s.moveSpeed + remote.keyPressed(Remote::Key::A) * -control_s.moveSpeed;
             rawY = remote.keyPressed(Remote::Key::W) * control_s.moveSpeed + remote.keyPressed(Remote::Key::S) * -control_s.moveSpeed;
             control_s.pitch = -static_cast<float>(remote.getMouseY()) * control_s.pitchSensitivity;
@@ -111,9 +126,9 @@ void ControlOperatorInterface::pollInputDevices() {
             control_s.flywheel = remote.getMouseR();
             control_s.agitator = remote.getMouseL();
             control_s.beyblade =
-                remote.keyPressed(Remote::Key::E) ? 0.6  :
-                remote.keyPressed(Remote::Key::Q) ? -0.6  :
-                remote.keyPressed(Remote::Key::F) ? 0 :
+                remote.keyPressed(Remote::Key::E) ?  BEYBLADE_SPEED :
+                remote.keyPressed(Remote::Key::Q) ? -BEYBLADE_SPEED :
+                remote.keyPressed(Remote::Key::F) ?  0 :
                 control_s.beyblade;
             break;
         default:

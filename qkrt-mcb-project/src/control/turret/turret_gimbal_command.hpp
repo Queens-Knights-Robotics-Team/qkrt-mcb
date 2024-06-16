@@ -43,7 +43,7 @@ public:
      *
      * @param turret turret to control.
      */
-    TurretGimbalCommand(TurretSubsystem& turret, ControlOperatorInterface& operatorInterface, float yawSens);
+    TurretGimbalCommand(TurretSubsystem& turret, ControlOperatorInterface& operatorInterface, float yawSens, float pitchSens);
 
     const char *getName() const override { return "Turret Gimbal"; }
 
@@ -59,6 +59,7 @@ private:
     TurretSubsystem& turret;
     ControlOperatorInterface& operatorInterface;
     float yawSens;
+    float pitchSens;
 };
 
 }  // namespace control::turret

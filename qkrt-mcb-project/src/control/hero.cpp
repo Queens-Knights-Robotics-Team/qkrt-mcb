@@ -75,7 +75,7 @@ Robot::Robot(Drivers &drivers)
                 .turretPitchPidConfig = modm::Pid<float>::Parameter(200,3,0,5000,50000),
                 .leway = 1000
             }),
-          turretGimbal(turret, drivers.controlOperatorInterface, 1.25),
+          turretGimbal(turret, drivers.controlOperatorInterface, 1.25, 1),
           agitator(&drivers, MotorId::MOTOR7, CanBus::CAN_BUS1, true, "e"),
           eduPidConfig{
               .kp = 2100,
@@ -95,7 +95,7 @@ Robot::Robot(Drivers &drivers)
           // rightSwitchUp(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP), false),
           // HCM(&drivers, {&moveIntegralCommand}, RemoteMapState(Remote::Switch::RIGHT_SWITCH, Remote::SwitchState::UP)),
           flywheels(drivers),
-          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.352f)
+          flywheelsCommand(&flywheels, drivers.controlOperatorInterface, 0.34f)
 {
 }
 
