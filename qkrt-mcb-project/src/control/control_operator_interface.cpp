@@ -140,7 +140,7 @@ void ControlOperatorInterface::pollInputDevices() {
             break;
         case DeviceType::KEYBOARDMOUSE:
             // you can adjust the move speed after pressing shift
-            control_s.moveSpeed = remote.keyPressed(Remote::Key::SHIFT) ? 1.5 : 0.35;
+            control_s.moveSpeed = remote.keyPressed(Remote::Key::SHIFT) ? 4 : 1.5;
             rawX = (remote.keyPressed(Remote::Key::D) * control_s.moveSpeed) - (remote.keyPressed(Remote::Key::A) * control_s.moveSpeed);
             rawY = (remote.keyPressed(Remote::Key::W) * control_s.moveSpeed) - (remote.keyPressed(Remote::Key::S) * control_s.moveSpeed);
             control_s.pitch = -static_cast<float>(remote.getMouseY()) * control_s.pitchSensitivity;
@@ -149,8 +149,8 @@ void ControlOperatorInterface::pollInputDevices() {
             control_s.agitator = remote.getMouseL();
             // you can mess with these values for beyblade depending on available power
             control_s.beyblade =
-                remote.keyPressed(Remote::Key::E) ?  0.45f :
-                remote.keyPressed(Remote::Key::Q) ? -1.25f :
+                remote.keyPressed(Remote::Key::E) ?  1.75f :
+                remote.keyPressed(Remote::Key::Q) ? -3.25f :
                 remote.keyPressed(Remote::Key::F) ?  0.00f :
                 control_s.beyblade;
             break;
